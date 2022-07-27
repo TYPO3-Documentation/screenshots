@@ -1,1 +1,6 @@
+.DS_Store
+.idea
 Classes/Runner/Codeception/Support/_generated/
+/var/*
+/vendor
+
