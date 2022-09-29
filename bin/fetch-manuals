@@ -1,0 +1,93 @@
+#!/bin/bash
+
+## Description: Fetch all official TYPO3 Documentation manuals
+## Usage: fetch-manuals
+## Example: fetch-manuals\nfetch-manuals -c documentation
+## Flags: [{"Name":"category","Shorthand":"c","Type":"string","Usage":"Clone only manuals of the selected category (documentation, application). Manuals of all categories if empty."}]
+
+TARGET_BASEPATH="/var/www/html/public/t3docs"
+CATEGORY=""
+
+fetch_options() {
+    local params;
+    local exitStatus;
+
+    params=$(getopt --options c: --longoptions category: --name "$0" -- "$@")
+
+    exitStatus=$?
+    if [ $exitStatus -eq 0 ]; then
+        eval set -- "$params"
+
+        while true
+        do
+            case "$1" in
+                -c|--category)
+                    CATEGORY=$2
+                    shift 2
+                    ;;
+                --)
+                    shift
+                    ;;
+                "")
+                    break
+                    ;;
+                *)
+                    echo "Invalid argument: '$1'" >&2
+                    exitStatus=1
+                    shift
+                    ;;
+            esac
+        done
+    fi
+
+    if [ $exitStatus -ne 0 ]; then
+        echo "Call \"fetch-manuals --help\" to display help and valid options."
+        exit $exitStatus
+    fi
+}
+
+clone_manual() {
+    local category=$1
+    local repositoryUrl=$2
+    local branch=$3
+    local manualFolder=$4
+
+    if [ "$CATEGORY" != "" ] && [ "$CATEGORY" != "$category" ]; then
+        echo "Skip cloning manual '$manualFolder'."
+        return 1
+    fi
+
+    if [[ -d "$TARGET_BASEPATH/$manualFolder" ]]; then
+        echo "Manual '$manualFolder' already exists."
+    else
+        echo "Clone manual '$manualFolder' from '$repositoryUrl' .."
+        git clone --branch "$branch" "$repositoryUrl" "$manualFolder"
+    fi
+
+    cd "$manualFolder"
+    git stash
+    git checkout "$branch"
+    git pull --rebase
+    cd - > /dev/null
+}
+
+[[ ! -d "$TARGET_BASEPATH" ]] && mkdir "$TARGET_BASEPATH"
+cd "$TARGET_BASEPATH"
+
+fetch_options $@
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Book-ExtbaseFluid.git" "main" "TYPO3CMS-Book-ExtbaseFluid"
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Guide-ContributionWorkflow.git" "main" "TYPO3CMS-Guide-ContributionWorkflow"
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Guide-FrontendLocalization.git" "main" "TYPO3CMS-Guide-FrontendLocalization"
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Guide-HowToDocument.git" "main" "TYPO3CMS-Guide-HowToDocument"
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Guide-Installation.git" "main" "TYPO3CMS-Guide-Installation"
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Reference-CoreApi.git" "main" "TYPO3CMS-Reference-CoreApi"
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Reference-TCA.git" "main" "TYPO3CMS-Reference-TCA"
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Reference-TSconfig.git" "main" "TYPO3CMS-Reference-TSconfig"
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Reference-Typoscript.git" "main" "TYPO3CMS-Reference-Typoscript"
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Tutorial-Editors.git" "main" "TYPO3CMS-Tutorial-Editors"
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Tutorial-GettingStarted.git" "main" "TYPO3CMS-Tutorial-GettingStarted"
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Tutorial-SitePackage.git" "main" "TYPO3CMS-Tutorial-SitePackage"
+clone_manual "documentation" "https://github.com/TYPO3-Documentation/TYPO3CMS-Tutorial-Typoscript45Minutes.git" "main" "TYPO3CMS-Tutorial-Typoscript45Minutes"
+clone_manual "application" "https://github.com/FriendsOfTYPO3/extension_builder" "master" "extension_builder"
+
+cd - > /dev/null
