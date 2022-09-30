@@ -13,7 +13,7 @@ namespace TYPO3\Documentation\Screenshots\Tests\Unit\Util;
  */
 
 use TYPO3\Documentation\Screenshots\Util\ArrayHelper;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use TYPO3\Documentation\Screenshots\Core\Unit\UnitTestCase;
 
 class ArrayHelperTest extends UnitTestCase
 {

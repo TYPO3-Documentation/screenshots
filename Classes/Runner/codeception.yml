@@ -3,7 +3,7 @@ suites:
     actor: Photographer
     modules:
       enabled:
-        - TYPO3\TestingFramework\Core\Acceptance\Helper\Login:
+        - TYPO3\Documentation\Screenshots\Core\Acceptance\Helper\Login:
             sessions:
               # This sessions must exist in the database fixture to get a logged in state.
               admin: 886526ce72b86870739cc41991144ec1
@@ -15,7 +15,7 @@ suites:
     actor: Photographer
     modules:
       enabled:
-        - TYPO3\TestingFramework\Core\Acceptance\Helper\Login:
+        - TYPO3\Documentation\Screenshots\Core\Acceptance\Helper\Login:
             sessions:
               # This sessions must exist in the database fixture to get a logged in state.
               admin: 886526ce72b86870739cc41991144ec1
@@ -27,7 +27,7 @@ suites:
     actor: Photographer
     modules:
       enabled:
-        - TYPO3\TestingFramework\Core\Acceptance\Helper\Login:
+        - TYPO3\Documentation\Screenshots\Core\Acceptance\Helper\Login:
             sessions:
               # This sessions must exist in the database fixture to get a logged in state.
               admin: 886526ce72b86870739cc41991144ec1
@@ -44,7 +44,7 @@ suites:
     actor: Photographer
     modules:
       enabled:
-        - TYPO3\TestingFramework\Core\Acceptance\Helper\Login:
+        - TYPO3\Documentation\Screenshots\Core\Acceptance\Helper\Login:
             sessions:
               # This sessions must exist in the database fixture to get a logged in state.
               admin: 886526ce72b86870739cc41991144ec1
@@ -57,7 +57,7 @@ suites:
     actor: Photographer
     modules:
       enabled:
-        - TYPO3\TestingFramework\Core\Acceptance\Helper\Login:
+        - TYPO3\Documentation\Screenshots\Core\Acceptance\Helper\Login:
             sessions:
               # This sessions must exist in the database fixture to get a logged in state.
               admin: 886526ce72b86870739cc41991144ec1
@@ -69,7 +69,7 @@ suites:
     actor: Photographer
     modules:
       enabled:
-        - TYPO3\TestingFramework\Core\Acceptance\Helper\Login:
+        - TYPO3\Documentation\Screenshots\Core\Acceptance\Helper\Login:
             sessions:
               # This sessions must exist in the database fixture to get a logged in state.
               admin: 886526ce72b86870739cc41991144ec1
@@ -103,7 +103,7 @@ modules:
         capabilities:
           chromeOptions:
             args: [ "headless" ]
-    - TYPO3\TestingFramework\Core\Acceptance\Helper\Acceptance
+    - TYPO3\Documentation\Screenshots\Core\Acceptance\Helper\Acceptance
     - TYPO3\Documentation\Screenshots\Runner\Codeception\Support\Helper\Typo3Cli
     - TYPO3\Documentation\Screenshots\Runner\Codeception\Support\Helper\Typo3CodeSnippets
     - TYPO3\Documentation\Screenshots\Runner\Codeception\Support\Helper\Typo3Draw

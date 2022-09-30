@@ -13,7 +13,7 @@ namespace TYPO3\Documentation\Screenshots\Tests\Unit\Util;
  */
 
 use TYPO3\Documentation\Screenshots\Util\StringHelper;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use TYPO3\Documentation\Screenshots\Core\Unit\UnitTestCase;
 
 class StringHelperTest extends UnitTestCase
 {
@@ -32,7 +32,7 @@ NOWDOC;
         $expected = <<<'NOWDOC'
    :alt: This is a TCA table
    :class: with-shadow
-   
+
    :ref:`A caption text linked to my-reference <my-reference>`
 NOWDOC;
 

@@ -15,7 +15,7 @@ namespace TYPO3\Documentation\Screenshots\Runner\Codeception\Support\Helper;
 use Codeception\Module;
 use Codeception\Module\WebDriver;
 use Facebook\WebDriver\WebDriverElement;
-use TYPO3\TestingFramework\Core\Acceptance\Helper\Login;
+use TYPO3\Documentation\Screenshots\Core\Acceptance\Helper\Login;
 
 /**
  * Helper to support comfortable navigation of the TYPO3 backend.
@@ -30,7 +30,7 @@ use TYPO3\TestingFramework\Core\Acceptance\Helper\Login;
  * - adding the actions to the actor instead of providing an own class
  *   to prevent additional injections in testing classes
  *
- * @see \TYPO3\TestingFramework\Core\Acceptance\Helper\AbstractPageTree
+ * @see \TYPO3\Documentation\Screenshots\Core\Acceptance\Helper\AbstractPageTree
  */
 class Typo3Navigation extends Module
 {

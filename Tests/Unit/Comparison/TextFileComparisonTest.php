@@ -16,7 +16,7 @@ use org\bovigo\vfs\vfsStream;
 use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\Documentation\Screenshots\Comparison\TextFileComparison;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use TYPO3\Documentation\Screenshots\Core\Unit\UnitTestCase;
 
 class TextFileComparisonTest extends UnitTestCase
 {
@@ -130,7 +130,7 @@ NOWDOC,
 @@ @@
  .. https://github.com/TYPO3-Documentation/t3docs-screenshots
  .. =========================================================
- 
+
 -.. figure:: /Images/AutomaticScreenshots/Original.png
 +.. figure:: /Images/AutomaticScreenshots/Actual.png
     :class: with-shadow

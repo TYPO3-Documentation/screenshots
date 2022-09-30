@@ -24,7 +24,7 @@ namespace TYPO3\Documentation\Screenshots\Runner\Codeception\Support\Helper;
  * - waits 0.1s per page tree level before opening the next page tree node
  *   as the levels get loaded via AJAX
  *
- * @see \TYPO3\TestingFramework\Core\Acceptance\Helper\AbstractPageTree
+ * @see \TYPO3\Documentation\Screenshots\Core\Acceptance\Helper\AbstractPageTree
  */
 class Typo3PageTree extends AbstractTypo3Tree
 {

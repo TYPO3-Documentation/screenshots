@@ -15,7 +15,7 @@ namespace TYPO3\Documentation\Screenshots\Tests\Unit\Runner\Codeception\Support\
 use Codeception\Lib\ModuleContainer;
 use org\bovigo\vfs\vfsStream;
 use TYPO3\Documentation\Screenshots\Runner\Codeception\Support\Helper\Typo3Screenshots;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use TYPO3\Documentation\Screenshots\Core\Unit\UnitTestCase;
 
 class Typo3ScreenshotsTest extends UnitTestCase
 {

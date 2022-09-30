@@ -18,7 +18,7 @@ use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Styleguide\TcaDataGenerator\Generator;
-use TYPO3\TestingFramework\Core\Acceptance\Extension\BackendEnvironment;
+use TYPO3\Documentation\Screenshots\Core\Acceptance\Extension\BackendEnvironment;
 
 /**
  * Load all core extensions and EXT:styleguide and EXT:screenshots

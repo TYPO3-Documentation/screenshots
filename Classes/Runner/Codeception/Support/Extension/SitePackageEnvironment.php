@@ -19,7 +19,7 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extensionmanager\Utility\InstallUtility;
-use TYPO3\TestingFramework\Core\Acceptance\Extension\BackendEnvironment;
+use TYPO3\Documentation\Screenshots\Core\Acceptance\Extension\BackendEnvironment;
 
 /**
  * Load all core extensions and EXT:site_package and EXT:screenshots

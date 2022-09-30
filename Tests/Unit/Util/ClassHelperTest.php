@@ -15,7 +15,7 @@ namespace TYPO3\Documentation\Screenshots\Tests\Unit\Util;
 use TYPO3\Documentation\Screenshots\Tests\Unit\Fixtures\ClassWithComments;
 use TYPO3\Documentation\Screenshots\Tests\Unit\Fixtures\ClassWithNoComments;
 use TYPO3\Documentation\Screenshots\Util\ClassHelper;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use TYPO3\Documentation\Screenshots\Core\Unit\UnitTestCase;
 
 class ClassHelperTest extends UnitTestCase
 {

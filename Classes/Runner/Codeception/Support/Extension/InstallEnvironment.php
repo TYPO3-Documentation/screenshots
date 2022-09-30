@@ -15,8 +15,8 @@ namespace TYPO3\Documentation\Screenshots\Runner\Codeception\Support\Extension;
 use Codeception\Event\TestEvent;
 use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\TestingFramework\Core\Acceptance\Extension\InstallMysqlCoreEnvironment;
-use TYPO3\TestingFramework\Core\Testbase;
+use TYPO3\Documentation\Screenshots\Core\Acceptance\Extension\InstallMysqlCoreEnvironment;
+use TYPO3\Documentation\Screenshots\Core\Testbase;
 
 /**
  * Set up environment for TYPO3 installation process.
@@ -29,7 +29,7 @@ use TYPO3\TestingFramework\Core\Testbase;
  *   This method is currently only used in the BackendEnvironment extension of the typo3/testing-framework package, but
  *   can probably be called here as well without side effect.
  *
- * @see \TYPO3\TestingFramework\Core\Acceptance\Extension\BackendEnvironment
+ * @see \TYPO3\Documentation\Screenshots\Core\Acceptance\Extension\BackendEnvironment
  */
 class InstallEnvironment extends InstallMysqlCoreEnvironment
 {

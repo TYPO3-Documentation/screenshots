@@ -14,7 +14,7 @@ namespace TYPO3\Documentation\Screenshots\Tests\Unit\Runner\Codeception\Support\
 
 use Codeception\Lib\ModuleContainer;
 use TYPO3\Documentation\Screenshots\Runner\Codeception\Support\Helper\Typo3Cli;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use TYPO3\Documentation\Screenshots\Core\Unit\UnitTestCase;
 
 class Typo3CliTest extends UnitTestCase
 {

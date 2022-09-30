@@ -15,7 +15,7 @@ namespace TYPO3\Documentation\Screenshots\Tests\Unit\Configuration;
 use org\bovigo\vfs\vfsStream;
 use TYPO3\Documentation\Screenshots\Configuration\Configuration;
 use TYPO3\Documentation\Screenshots\Configuration\ConfigurationRepository;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use TYPO3\Documentation\Screenshots\Core\Unit\UnitTestCase;
 
 class ConfigurationRepositoryTest extends UnitTestCase
 {

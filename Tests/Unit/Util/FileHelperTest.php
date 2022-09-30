@@ -14,7 +14,7 @@ namespace TYPO3\Documentation\Screenshots\Tests\Unit\Util;
 
 use org\bovigo\vfs\vfsStream;
 use TYPO3\Documentation\Screenshots\Util\FileHelper;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use TYPO3\Documentation\Screenshots\Core\Unit\UnitTestCase;
 
 class FileHelperTest extends UnitTestCase
 {

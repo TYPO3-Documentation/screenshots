@@ -16,7 +16,7 @@ use org\bovigo\vfs\vfsStream;
 use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\Documentation\Screenshots\Comparison\ImageComparison;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use TYPO3\Documentation\Screenshots\Core\Unit\UnitTestCase;
 
 class ImageComparisonTest extends UnitTestCase
 {
