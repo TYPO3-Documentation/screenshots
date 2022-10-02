@@ -23,6 +23,20 @@
   "support": {
     "issues": "https://github.com/TYPO3-Documentation/t3docs-screenshots/issues"
   },
+  "require": {
+    "sensiolabs/ansi-to-html": "^1.2",
+    "sebastian/diff": "^4.0",
+    "codeception/codeception": "^5.0",
+    "codeception/module-webdriver": "^3.1"
+  },
+  "suggest": {
+    "t3docs/site-package": "Some screenshots are by default taken from this extension",
+    "typo3/cms-styleguide": "Some screenshots are by default taken from this extension",
+    "typo3/cms-introduction": "Some screenshots are by default taken from this extension",
+    "t3docs/examples": "Some screenshots are by default taken from this extension",
+    "friendsoftypo3/extension-builder": "Some screenshots are by default taken from this extension",
+    "t3docs/site-package": "Some screenshots are by default taken from this extension",
+  }
   "autoload": {
     "psr-4": {
       "TYPO3\\Documentation\\Screenshots\\": "Classes/"
