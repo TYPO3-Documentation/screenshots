@@ -638,11 +638,11 @@ class Testbase
 
         // Reset state from a possible previous run
         GeneralUtility::purgeInstances();
-echo '$relExtensionrootPath: ' . realpath($relExtensionrootPath) . "\n";
-\TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::run();
-var_dump(Environment::toArray());
-echo 'getenv(\'TYPO3_PATH_ROOT\'): ' . getenv('TYPO3_PATH_ROOT') . "\n";
-echo '$this->getPackagesPath(): ' . $this->getPackagesPath() . "\n";
+# echo '$relExtensionrootPath: ' . realpath($relExtensionrootPath) . "\n";
+# \TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::run();
+# var_dump(Environment::toArray());
+# echo 'getenv(\'TYPO3_PATH_ROOT\'): ' . getenv('TYPO3_PATH_ROOT') . "\n";
+# echo '$this->getPackagesPath(): ' . $this->getPackagesPath() . "\n";
         if (
             is_dir($relExtensionrootPath . '../t3docs')
             && is_dir($relExtensionrootPath . '../../vendor')
@@ -933,9 +933,9 @@ echo '$this->getPackagesPath(): ' . $this->getPackagesPath() . "\n";
             // used for packaging non-composer instances.
             $webRoot = getcwd();
         }
-echo '$webRoot: ' . $webRoot . "\n";
-echo 'getenv(\'TYPO3_PATH_ROOT\'): ' . getenv('TYPO3_PATH_ROOT') . "\n";
-echo 'getcwd(): ' . getcwd() . "\n";
+# echo '$webRoot: ' . $webRoot . "\n";
+# echo 'getenv(\'TYPO3_PATH_ROOT\'): ' . getenv('TYPO3_PATH_ROOT') . "\n";
+# echo 'getcwd(): ' . getcwd() . "\n";
         return rtrim(strtr($webRoot, '\\', '/'), '/') . '/';
     }
 
