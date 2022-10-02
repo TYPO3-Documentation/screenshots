@@ -24,6 +24,11 @@
     "issues": "https://github.com/TYPO3-Documentation/t3docs-screenshots/issues"
   },
   "require": {
+    "ext-curl": "*",
+    "ext-dom": "*",
+    "ext-imagick": "*",
+    "ext-json": "*",
+    "ext-libxml": "*",
     "sensiolabs/ansi-to-html": "^1.2",
     "sebastian/diff": "^4.0",
     "codeception/codeception": "^5.0",

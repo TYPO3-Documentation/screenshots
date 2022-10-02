@@ -15,23 +15,23 @@ namespace TYPO3\Documentation\Screenshots\Runner\Codeception\Support\Extension;
 use Codeception\Event\TestEvent;
 use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\Documentation\Screenshots\Core\Acceptance\Extension\InstallMysqlCoreEnvironment;
+use TYPO3\Documentation\Screenshots\Core\Acceptance\Extension\BackendEnvironment;
 use TYPO3\Documentation\Screenshots\Core\Testbase;
 
 /**
  * Set up environment for TYPO3 installation process.
  *
- * This extension extends the class InstallMysqlCoreEnvironment of the typo3/testing-framework package slightly.
- * It should be integrated in the typo3/testing-framework ideally. Currently it differs by:
+ * This extension extends the class BackendEnvironment slightly.
+ * Currently it differs by:
  *
- * - the Testbase::setUpBasicTypo3Bootstrap() method is called to initialize the paths in the static Environment
- *   instance: Helpers are partially dependent on these paths.
- *   This method is currently only used in the BackendEnvironment extension of the typo3/testing-framework package, but
+ * - the Testbase::setUpBasicTypo3Bootstrap() method is called to initialize the paths
+ *   in the static Environment instance: Helpers are partially dependent on these paths.
+ *   This method is currently only used in the BackendEnvironment, but
  *   can probably be called here as well without side effect.
  *
  * @see \TYPO3\Documentation\Screenshots\Core\Acceptance\Extension\BackendEnvironment
  */
-class InstallEnvironment extends InstallMysqlCoreEnvironment
+class InstallEnvironment extends BackendEnvironment
 {
     protected array $localConfig = [
         // Order matters: Align sorting of core extensions with /public/typo3conf/PackageStates.php
