@@ -34,7 +34,7 @@ use TYPO3\Documentation\Screenshots\Core\Acceptance\Helper\Login;
  */
 class Typo3Navigation extends Module
 {
-    protected $config = [
+    protected array $config = [
         'defaults' => [],
     ];
 

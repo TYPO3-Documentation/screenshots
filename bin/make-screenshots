@@ -56,7 +56,7 @@ fetch_options() {
 }
 
 cleanup_screenshots() {
-    typo3 screenshots:cleanup
+    vendor/bin/typo3 screenshots:cleanup
 }
 
 make_screenshots() {
@@ -70,14 +70,14 @@ make_screenshots() {
     typo3DatabaseUsername=root \
     typo3DatabasePassword=root \
     typo3DatabaseHost=db \
-    /var/www/html/vendor/bin/codecept run -d -c /var/www/html/public/typo3conf/ext/screenshots/Classes/Runner/codeception.yml $SUITE_ID
+    vendor/bin/codecept run -d -c public/typo3conf/ext/screenshots/Classes/Runner/codeception.yml $SUITE_ID
 }
 
 fetch_suites() {
     local suites;
     local exitStatus;
 
-    suites=$(typo3 screenshots:fetchsuites --target-path=$TARGET_PATH --suite-id=$SUITE_ID --actions-id=$ACTIONS_ID)
+    suites=$(vendor/bin/typo3 screenshots:fetchsuites --target-path=$TARGET_PATH --suite-id=$SUITE_ID --actions-id=$ACTIONS_ID)
     exitStatus=$?
 
     echo $suites

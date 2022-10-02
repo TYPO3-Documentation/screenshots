@@ -29,9 +29,7 @@ class Login extends Module
     /**
      * @var array Filled by .yml config with valid sessions per role
      */
-    protected array $config = [
-        'sessions' => [],
-    ];
+    // protected array $config = ['sessions' => [],];
 
     /**
      * Set a backend user session cookie and load the backend index.php.

@@ -28,7 +28,7 @@ use TYPO3\Documentation\Screenshots\Util\YamlHelper;
  */
 class Typo3CodeSnippets extends Module
 {
-    protected $config = [
+    protected array $config = [
         'sourcePath' => '',
         'targetPath' => 'CodeSnippets'
     ];

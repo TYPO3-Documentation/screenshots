@@ -28,7 +28,7 @@ class Typo3Screenshots extends Module
     public const POSITION_RIGHT_TOP = 'right-top';
     public const POSITION_RIGHT_BOTTOM = 'right-bottom';
 
-    protected $config = [
+    protected array $config = [
         'actionsIdFilter' => '',
         'basePath' => '',
         'documentationPath' => '',

@@ -24,6 +24,7 @@ use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Psr\Container\ContainerInterface;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Core\ClassLoadingInformation;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Schema\SchemaMigrator;
@@ -585,7 +586,16 @@ class Testbase
         // @todo: This should by now work with using "our" ConnectionPool again, it does now, though.
         $connectionParameters = $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default'];
         unset($connectionParameters['dbname']);
-        $schemaManager = DriverManager::getConnection($connectionParameters)->createSchemaManager();
+        $connectionClass = DriverManager::getConnection($connectionParameters);
+        if (method_exists($connectionClass, 'createSchemaManager')) {
+            $schemaManager = $connectionClass->createSchemaManager();
+        }
+        elseif (method_exists($connectionClass, 'getSchemaManager')) {
+            $schemaManager = $connectionClass->getSchemaManager();
+        }
+        else {
+            // @TODO
+        }
 
         if ($schemaManager->getDatabasePlatform()->getName() === 'sqlite') {
             // This is the "path" option in sqlite: one file = one db
@@ -621,11 +631,37 @@ class Testbase
     {
         $_SERVER['PWD'] = $instancePath;
         $_SERVER['argv'][0] = 'typo3/index.php';
+        $relExtensionrootPath = dirname(__FILE__) . '/../../';
+        $installedInVendor = false;
+        $installedInTypo3conf = false;
+        $vendorPath = '';
 
         // Reset state from a possible previous run
         GeneralUtility::purgeInstances();
+echo '$relExtensionrootPath: ' . realpath($relExtensionrootPath) . "\n";
+\TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::run();
+var_dump(Environment::toArray());
+echo 'getenv(\'TYPO3_PATH_ROOT\'): ' . getenv('TYPO3_PATH_ROOT') . "\n";
+echo '$this->getPackagesPath(): ' . $this->getPackagesPath() . "\n";
+        if (
+            is_dir($relExtensionrootPath . '../t3docs')
+            && is_dir($relExtensionrootPath . '../../vendor')
+        ) {
+            $installedInVendor = true;
+            $vendorPath = $relExtensionrootPath . '../../vendor';
+        }
+        elseif (
+            is_dir($relExtensionrootPath . '../ext')
+            && is_dir($relExtensionrootPath . '../../typo3conf')
+        ) {
+            $installedInTypo3conf = true;
+        }
 
-        $classLoader = require __DIR__ . '/../../../../autoload.php';
+
+        # $classLoader = require $vendorPath . '/autoload.php';
+        if ($this->getPackagesPath()) {
+            $classLoader = require $this->getPackagesPath() . '/autoload.php';
+        }
         SystemEnvironmentBuilder::run(1, SystemEnvironmentBuilder::REQUESTTYPE_BE | SystemEnvironmentBuilder::REQUESTTYPE_CLI);
         $container = Bootstrap::init($classLoader);
         // Make sure output is not buffered, so command-line output can take place and
@@ -865,7 +901,18 @@ class Testbase
      */
     public function getPackagesPath(): string
     {
-        return rtrim(strtr(dirname(__DIR__, 4), '\\', '/'), '/');
+        # return rtrim(strtr(dirname(__DIR__, 4), '\\', '/'), '/');
+        if ($pos = strpos(getenv('TYPO3_PATH_ROOT'), '/typo3temp/var/tests/')) {
+            $typo3_path_root = substr(getenv('TYPO3_PATH_ROOT'), 0, $pos);
+        } else {
+            $typo3_path_root = getenv('TYPO3_PATH_ROOT');
+        }
+        $packagesPath = $typo3_path_root . '/../vendor';
+        if (!is_dir($packagesPath)) {
+            // @TODO
+            echo '$packagesPath not found';
+        }
+        return $packagesPath;
     }
 
     /**
@@ -886,6 +933,9 @@ class Testbase
             // used for packaging non-composer instances.
             $webRoot = getcwd();
         }
+echo '$webRoot: ' . $webRoot . "\n";
+echo 'getenv(\'TYPO3_PATH_ROOT\'): ' . getenv('TYPO3_PATH_ROOT') . "\n";
+echo 'getcwd(): ' . getcwd() . "\n";
         return rtrim(strtr($webRoot, '\\', '/'), '/') . '/';
     }
 

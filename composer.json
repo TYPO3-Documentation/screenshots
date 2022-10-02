@@ -37,5 +37,11 @@
     "typo3/cms": {
       "extension-key": "screenshots"
     }
-  }
+  },
+  "bin": [
+    "bin/fetch-manuals",
+    "bin/init-screenshot-json",
+    "bin/make-screenshots",
+    "bin/run-unit-tests"
+  ]
 }
