@@ -20,7 +20,7 @@ use TYPO3\Documentation\Screenshots\Core\Unit\UnitTestCase;
 
 class FetchSuitesCommandTest extends UnitTestCase
 {
-    protected $resetSingletonInstances = true;
+    protected bool $resetSingletonInstances = true;
 
     /**
      * @test

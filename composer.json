@@ -32,26 +32,22 @@
     "sensiolabs/ansi-to-html": "^1.2",
     "sebastian/diff": "^4.0",
     "codeception/codeception": "^5.0",
-    "codeception/module-webdriver": "^3.1"
+    "codeception/module-webdriver": "^3.1",
+    "mikey179/vfsstream": "^1.6"
   },
   "suggest": {
     "friendsoftypo3/extension-builder": "Some screenshots are by default taken from this extension",
     "georgringer/news": "Some screenshots are by default taken from this extension",
     "t3docs/site-package": "Some screenshots are by default taken from this extension",
     "t3docs/examples": "Some screenshots are by default taken from this extension",
-    "t3docs/site-package": "Some screenshots are by default taken from this extension",
     "typo3/cms-introduction": "Some screenshots are by default taken from this extension",
     "typo3/cms-styleguide": "Some screenshots are by default taken from this extension",
     "typo3/cms-workspaces": "Some screenshots are by default taken from this extension"
   },
   "autoload": {
     "psr-4": {
-      "TYPO3\\Documentation\\Screenshots\\": "Classes/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-        "TYPO3\\Documentation\\Screenshots\\Tests\\Unit\\": "Tests/Unit/"
+      "TYPO3\\Documentation\\Screenshots\\": "Classes/",
+      "TYPO3\\Documentation\\Screenshots\\Tests\\": "Tests/"
     }
   },
   "extra": {
