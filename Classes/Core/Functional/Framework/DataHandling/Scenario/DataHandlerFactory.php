@@ -148,9 +148,9 @@ class DataHandlerFactory
         $tableName = $entityConfiguration->getTableName();
         $newId = $this->getUniqueIdForNewRecords();
         $this->setInDataMap($tableName, $newId, $values, (int)$workspaceId);
-        if (isset($itemSettings['actions'])) {
-            $this->setInCommandMap($tableName, $newId, $nodeId, $itemSettings['actions'], (int)$workspaceId);
-        }
+        #if (isset($itemSettings['actions'])) {
+        #    $this->setInCommandMap($tableName, $newId, $nodeId, $itemSettings['actions'], (int)$workspaceId);
+        #}
 
         foreach ($itemSettings['versionVariants'] ?? [] as $versionVariantSettings) {
             $this->processVersionVariantItem(
@@ -216,9 +216,9 @@ class DataHandlerFactory
         $newId = $this->getUniqueIdForNewRecords();
         $workspaceId = $itemSettings['version']['workspace'] ?? 0;
         $this->setInDataMap($tableName, $newId, $values, (int)$workspaceId);
-        if (isset($itemSettings['actions'])) {
-            $this->setInCommandMap($tableName, $newId, $nodeId, $itemSettings['actions'], (int)$workspaceId);
-        }
+        #if (isset($itemSettings['actions'])) {
+        #    $this->setInCommandMap($tableName, $newId, $nodeId, $itemSettings['actions'], (int)$workspaceId);
+        #}
 
         foreach ($itemSettings['languageVariants'] ?? [] as $variantItemSettings) {
             $this->processLanguageVariantItem(
@@ -268,9 +268,9 @@ class DataHandlerFactory
 
         $tableName = $entityConfiguration->getTableName();
         $this->setInDataMap($tableName, $ancestorId, $values, (int)$values['workspace']);
-        if (isset($itemSettings['actions'])) {
-            $this->setInCommandMap($tableName, $ancestorId, $nodeId, $itemSettings['actions'], (int)$values['workspace']);
-        }
+        #if (isset($itemSettings['actions'])) {
+        #    $this->setInCommandMap($tableName, $ancestorId, $nodeId, $itemSettings['actions'], (int)$values['workspace']);
+        #}
     }
 
     /**

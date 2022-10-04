@@ -9,7 +9,7 @@ $EM_CONF[$_EXTKEY] = [
     'state' => 'stable',
     'createDirs' => '',
     'clearCacheOnLoad' => 0,
-    'version' => '11.1.2',
+    'version' => '12.0.0',
     'autoload' => [
         'psr-4' => [
             "TYPO3\\Documentation\\Screenshots\\" => "Classes/",
@@ -18,7 +18,7 @@ $EM_CONF[$_EXTKEY] = [
     ],
     'constraints' => [
         'depends' => [
-            'typo3' => '11.0.0-11.99.99',
+            'typo3' => '11.0.0-12.99.99',
         ],
         'conflicts' => [
         ],

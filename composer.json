@@ -28,12 +28,7 @@
     "ext-dom": "*",
     "ext-imagick": "*",
     "ext-json": "*",
-    "ext-libxml": "*",
-    "sensiolabs/ansi-to-html": "^1.2",
-    "sebastian/diff": "^4.0",
-    "codeception/codeception": "^5.0",
-    "codeception/module-webdriver": "^3.1",
-    "mikey179/vfsstream": "^1.6"
+    "ext-libxml": "*"
   },
   "suggest": {
     "friendsoftypo3/extension-builder": "Some screenshots are by default taken from this extension",

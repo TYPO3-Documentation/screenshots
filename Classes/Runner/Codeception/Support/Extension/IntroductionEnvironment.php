@@ -113,7 +113,8 @@ class IntroductionEnvironment extends BackendEnvironment
         Bootstrap::initializeLanguageObject();
 
         $extensionKey = 'introduction';
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $objectManager->get(InstallUtility::class)->install($extensionKey);
+        #$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        #$objectManager->get(InstallUtility::class)->install($extensionKey);
+        GeneralUtility::makeInstance(InstallUtility::class)->install($extensionKey);
     }
 }

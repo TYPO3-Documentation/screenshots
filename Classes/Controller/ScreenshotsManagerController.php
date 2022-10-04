@@ -38,10 +38,8 @@ class ScreenshotsManagerController extends ActionController
         $this->pageRenderer = $pageRenderer;
     }
 
-    protected function initializeView(ViewInterface $view)
+    protected function initializeView($view)
     {
-        parent::initializeView($view);
-
         $this->pageRenderer->addInlineLanguageLabelFile('EXT:screenshots/Resources/Private/Language/locallang_mod.xlf');
         $this->pageRenderer->addCssFile('EXT:screenshots/Resources/Public/Css/screenshots-manager.css');
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Screenshots/ScreenshotsManager');

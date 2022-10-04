@@ -113,7 +113,8 @@ class ExamplesEnvironment extends BackendEnvironment
         Bootstrap::initializeLanguageObject();
 
         $extensionKey = 'examples';
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $objectManager->get(InstallUtility::class)->install($extensionKey);
+        #$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        #$objectManager->get(InstallUtility::class)->install($extensionKey);
+        GeneralUtility::makeInstance(InstallUtility::class)->install($extensionKey);
     }
 }
