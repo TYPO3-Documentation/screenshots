@@ -60,6 +60,8 @@ cleanup_screenshots() {
 }
 
 make_screenshots() {
+    # echo '\$TARGET_PATH ' + $TARGET_PATH
+
     screenshotsPathFilter=$TARGET_PATH \
     screenshotsActionsIdFilter=$ACTIONS_ID \
     typo3InstallMysqlDatabaseName=screenshots_install \
@@ -70,7 +72,9 @@ make_screenshots() {
     typo3DatabaseUsername=root \
     typo3DatabasePassword=root \
     typo3DatabaseHost=db \
-    vendor/bin/codecept run -d -c public/typo3conf/ext/screenshots/Classes/Runner/codeception.yml $SUITE_ID
+    vendor/bin/codecept run -d -c vendor/t3docs/screenshots/Classes/Runner/codeception.yml $SUITE_ID
+
+    ## vendor/bin/codecept run -d -c public/typo3conf/ext/screenshots/Classes/Runner/codeception.yml $SUITE_ID
 }
 
 fetch_suites() {

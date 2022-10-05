@@ -15,3 +15,4 @@ services:
     tags:
       - name: 'console.command'
         command: 'screenshots:mappings'
+  TYPO3\Documentation\Screenshots\Configuration\ConfigurationRepository:

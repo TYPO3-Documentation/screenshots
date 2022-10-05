@@ -244,7 +244,7 @@ abstract class FunctionalTestCase extends BaseTestCase implements ContainerInter
      */
     protected function setUp(): void
     {
-        if (!defined('ORIGINAL_ROOT')) {
+        if (!defined('ORIGINAL_WEB_ROOT')) {
             self::markTestSkipped('Functional tests must be called through phpunit on CLI');
         }
 
@@ -1114,6 +1114,6 @@ abstract class FunctionalTestCase extends BaseTestCase implements ContainerInter
     protected static function getInstancePath(): string
     {
         $identifier = self::getInstanceIdentifier();
-        return ORIGINAL_ROOT . 'typo3temp/var/tests/functional-' . $identifier;
+        return ORIGINAL_WEB_ROOT . 'typo3temp/var/tests/functional-' . $identifier;
     }
 }

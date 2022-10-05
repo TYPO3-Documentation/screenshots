@@ -1,59 +1,27 @@
 {
-  "name": "t3docs/screenshots",
-  "type": "typo3-cms-extension",
-  "description": "Provide tools and runner to take scripted screenshots of the TYPO3 CMS.",
-  "authors": [
-    {
-      "name": "TYPO3 CMS Documentation Team",
-      "role": "Developer",
-      "homepage": "https://typo3.org/community/teams/documentation"
+    "name": "t3docs/screenshots",
+    "description": "Provide tools and runner to take scripted screenshots of the TYPO3 CMS.",
+    "type": "typo3-cms-extension",
+    "license": [
+        "GPL-2.0-or-later"
+    ],
+    "require": {
+        "typo3/cms-core": "^12.0"
     },
-    {
-      "name": "The TYPO3 Community",
-      "role": "Contributor",
-      "homepage": "https://typo3.org/community/"
-    }
-  ],
-  "homepage": "https://github.com/TYPO3-Documentation/t3docs-screenshots",
-  "license": "MIT",
-  "keywords": [
-    "typo3",
-    "screenshot"
-  ],
-  "support": {
-    "issues": "https://github.com/TYPO3-Documentation/t3docs-screenshots/issues"
-  },
-  "require": {
-    "ext-curl": "*",
-    "ext-dom": "*",
-    "ext-imagick": "*",
-    "ext-json": "*",
-    "ext-libxml": "*"
-  },
-  "suggest": {
-    "friendsoftypo3/extension-builder": "Some screenshots are by default taken from this extension",
-    "georgringer/news": "Some screenshots are by default taken from this extension",
-    "t3docs/site-package": "Some screenshots are by default taken from this extension",
-    "t3docs/examples": "Some screenshots are by default taken from this extension",
-    "typo3/cms-introduction": "Some screenshots are by default taken from this extension",
-    "typo3/cms-styleguide": "Some screenshots are by default taken from this extension",
-    "typo3/cms-workspaces": "Some screenshots are by default taken from this extension"
-  },
-  "autoload": {
-    "psr-4": {
-      "TYPO3\\Documentation\\Screenshots\\": "Classes/",
-      "TYPO3\\Documentation\\Screenshots\\Tests\\": "Tests/"
-    }
-  },
-  "extra": {
-    "typo3/cms": {
-      "extension-key": "screenshots"
-    }
-  },
-  "bin": [
-    "bin/fetch-manuals",
-    "bin/init-screenshot-json",
-    "bin/make-screenshots",
-    "bin/run-unit-tests"
-  ]
+    "autoload": {
+        "psr-4": {
+            "TYPO3\\Documentation\\Screenshots\\": "Classes/"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "screenshots"
+        }
+    },
+    "bin": [
+        "bin/fetch-manuals",
+        "bin/init-screenshot-json",
+        "bin/make-screenshots",
+        "bin/run-unit-tests"
+    ]
 }

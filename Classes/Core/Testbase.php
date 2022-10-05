@@ -31,6 +31,7 @@ use TYPO3\CMS\Core\Database\Schema\SchemaMigrator;
 use TYPO3\CMS\Core\Database\Schema\SqlReader;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use function PHPUnit\Framework\directoryExists;
 
 /**
  * This is a helper class used by unit, functional and acceptance test
@@ -70,18 +71,32 @@ class Testbase
     }
 
     /**
-     * Defines the constant ORIGINAL_ROOT for the path to the original TYPO3 document root.
+     * Defines the constant ORIGINAL_WEB_ROOT for the path to the original TYPO3 document root.
      * For functional / acceptance tests only
-     * If ORIGINAL_ROOT already is defined, this method is a no-op.
+     * If ORIGINAL_WEB_ROOT already is defined, this method is a no-op.
      */
-    public function defineOriginalRootPath(): void
+    public function defineOriginalWebRootPath(): void
     {
-        if (!defined('ORIGINAL_ROOT')) {
-            define('ORIGINAL_ROOT', $this->getWebRoot());
+        if (!defined('ORIGINAL_WEB_ROOT')) {
+            define('ORIGINAL_WEB_ROOT', $this->getWebRoot());
         }
-
-        if (!file_exists(ORIGINAL_ROOT . 'index.php')) {
+        if (!file_exists(ORIGINAL_WEB_ROOT . 'index.php')) {
             $this->exitWithMessage('Unable to determine path to entry script. Please check your path or set an environment variable \'TYPO3_PATH_ROOT\' to your root path.');
+        }
+    }
+
+    /**
+     * Defines the constant ORIGINAL_APP_ROOT for the path to the original TYPO3 document root.
+     * For functional / acceptance tests only
+     * If ORIGINAL_APP_ROOT already is defined, this method is a no-op.
+     */
+    public function defineOriginalAppRootPath(): void
+    {
+        if (!defined('ORIGINAL_APP_ROOT')) {
+            define('ORIGINAL_APP_ROOT', $this->getAppRoot());
+        }
+        if (!directoryExists(ORIGINAL_APP_ROOT)) {
+            $this->exitWithMessage('Unable to determine path to installation root. Please check your path or set an environment variable \'TYPO3_PATH_APP\' to your root path.');
         }
     }
 
@@ -180,22 +195,52 @@ class Testbase
      */
     public function setUpInstanceCoreLinks($instancePath): void
     {
-        $linksToSet = [
-            '../../../../' => $instancePath . '/typo3_src',
-            'typo3_src/typo3/sysext/' => $instancePath . '/typo3/sysext',
-        ];
-        chdir($instancePath);
-        $this->createDirectory($instancePath . '/typo3');
-        foreach ($linksToSet as $from => $to) {
-            $success = symlink(realpath($from), $to);
-            if (!$success) {
-                throw new Exception(
-                    'Creating link failed: from ' . $from . ' to: ' . $to,
-                    1376657199
-                );
+        $sysextPath = rtrim(ORIGINAL_WEB_ROOT, '/') . '/typo3/sysext';
+
+        // number 8 can be replaced by (real amount of system-extensions + 2)
+        if (is_dir($sysextPath) && count(scandir($sysextPath)) > 8) {
+            $linksToSet = [
+                '../../../../' => $instancePath . '/typo3_src',
+                'typo3_src/typo3/sysext/' => $instancePath . '/typo3/sysext',
+            ];
+            chdir($instancePath);
+            $this->createDirectory($instancePath . '/typo3');
+            # var_dump([ '$linksToSet' => $linksToSet, 'ORIGINAL_WEB_ROOT' => ORIGINAL_WEB_ROOT, '$sysextPath' => $sysextPath ]);
+            foreach ($linksToSet as $from => $to) {
+                # var_dump([ '$instancePath' => $instancePath, '$from' => $from, 'realpath($from)' => realpath($from) ]);
+                // further check is advisable, if realpath($from) belongs to TYPO3 installation
+                if (realpath($from) !== false) {
+                    $success = symlink(realpath($from), $to);
+                    if (!$success) {
+                        throw new Exception(
+                            'Creating link failed: from ' . $from . ' to: ' . $to,
+                            1376657199
+                        );
+                    }
+                }
+                else {
+                    // @TODO
+                }
             }
         }
-
+        else {
+            // This must be a composer setup
+            # throw new Exception('New implementation required!',1376657199);
+            $vendorPath = rtrim(ORIGINAL_APP_ROOT, '/') . '/vendor';
+var_dump([
+    '$linksToSet' => [],
+    '$vendorPath' => $vendorPath,
+    'ORIGINAL_APP_ROOT' => ORIGINAL_APP_ROOT,
+    'ORIGINAL_WEB_ROOT' => ORIGINAL_WEB_ROOT,
+    '$sysextPath' => $sysextPath
+]);
+            #$linksToSet = [
+            #    '../../../../' => $instancePath . '/typo3_src',
+            #    'typo3_src/typo3/sysext/' => $instancePath . '/typo3/sysext',
+            #];
+        }
+echo '$instancePath:' . $instancePath . "\n";
+        # die();
         // We can't just link the entry scripts here, because acceptance tests will make use of them
         // and we need Composer Mode to be turned off, thus they need to be rewritten to use the SystemEnvironmentBuilder
         // of the testing framework.
@@ -241,7 +286,7 @@ class Testbase
     public function linkTestExtensionsToInstance($instancePath, array $extensionPaths): void
     {
         foreach ($extensionPaths as $extensionPath) {
-            $absoluteExtensionPath = ORIGINAL_ROOT . $extensionPath;
+            $absoluteExtensionPath = ORIGINAL_WEB_ROOT . $extensionPath;
             if (!is_dir($absoluteExtensionPath)) {
                 throw new Exception(
                     'Test extension path ' . $absoluteExtensionPath . ' not found',
@@ -417,9 +462,9 @@ class Testbase
             if ($databaseCharset) {
                 $originalConfigurationArray['DB']['Connections']['Default']['charset'] = $databaseCharset;
             }
-        } elseif (file_exists(ORIGINAL_ROOT . 'typo3conf/LocalConfiguration.php')) {
+        } elseif (file_exists(ORIGINAL_WEB_ROOT . 'typo3conf/LocalConfiguration.php')) {
             // See if a LocalConfiguration file exists in "parent" instance to get db credentials from
-            $originalConfigurationArray = require ORIGINAL_ROOT . 'typo3conf/LocalConfiguration.php';
+            $originalConfigurationArray = require ORIGINAL_WEB_ROOT . 'typo3conf/LocalConfiguration.php';
         } else {
             throw new Exception(
                 'Database credentials for tests are neither set through environment'
@@ -477,7 +522,7 @@ class Testbase
     public function setUpLocalConfiguration($instancePath, array $configuration, array $overruleConfiguration): void
     {
         // Base of final LocalConfiguration is core factory configuration
-        $finalConfigurationArray = require ORIGINAL_ROOT . 'typo3/sysext/core/Configuration/FactoryConfiguration.php';
+        $finalConfigurationArray = require ORIGINAL_WEB_ROOT . 'typo3/sysext/core/Configuration/FactoryConfiguration.php';
         $finalConfigurationArray = array_replace_recursive($finalConfigurationArray, $configuration);
         $finalConfigurationArray = array_replace_recursive($finalConfigurationArray, $overruleConfiguration);
         $result = file_put_contents(
@@ -638,11 +683,12 @@ class Testbase
 
         // Reset state from a possible previous run
         GeneralUtility::purgeInstances();
-# echo '$relExtensionrootPath: ' . realpath($relExtensionrootPath) . "\n";
-# \TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::run();
-# var_dump(Environment::toArray());
-# echo 'getenv(\'TYPO3_PATH_ROOT\'): ' . getenv('TYPO3_PATH_ROOT') . "\n";
-# echo '$this->getPackagesPath(): ' . $this->getPackagesPath() . "\n";
+echo '$instancePath: ' . $instancePath . "\n";
+echo '$relExtensionrootPath: ' . realpath($relExtensionrootPath) . "\n";
+\TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::run();
+var_dump(Environment::toArray());
+echo 'getenv(\'TYPO3_PATH_ROOT\'): ' . getenv('TYPO3_PATH_ROOT') . "\n";
+echo '$this->getPackagesPath(): ' . $this->getPackagesPath() . "\n";
         if (
             is_dir($relExtensionrootPath . '../t3docs')
             && is_dir($relExtensionrootPath . '../../vendor')
@@ -937,6 +983,23 @@ class Testbase
 # echo 'getenv(\'TYPO3_PATH_ROOT\'): ' . getenv('TYPO3_PATH_ROOT') . "\n";
 # echo 'getcwd(): ' . getcwd() . "\n";
         return rtrim(strtr($webRoot, '\\', '/'), '/') . '/';
+    }
+
+    /**
+     * Returns the absolute path the TYPO3 installation.
+     * This is the "original" installation, not the "instance" root for functional / acceptance tests.
+     *
+     * @return string the TYPO3 installation path using Unix path separators
+     */
+    public function getAppRoot(): string
+    {
+        if (getenv('TYPO3_PATH_APP')) {
+            $appRoot = getenv('TYPO3_PATH_APP');
+        }
+        else {
+            // @TODO
+        }
+        return rtrim(strtr($appRoot, '\\', '/'), '/') . '/';
     }
 
     /**

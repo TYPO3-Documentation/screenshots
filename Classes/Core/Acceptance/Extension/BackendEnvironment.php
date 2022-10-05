@@ -209,6 +209,7 @@ abstract class BackendEnvironment extends Extension
         $this->config['typo3DatabaseDriver'] = is_string($env) ? trim($env) : $this->config['typo3DatabaseDriver'];
         $env = getenv('typo3DatabaseCharset');
         $this->config['typo3DatabaseCharset'] = is_string($env) ? trim($env) : $this->config['typo3DatabaseCharset'];
+        # var_dump(getenv());
     }
 
     /**
@@ -221,15 +222,17 @@ abstract class BackendEnvironment extends Extension
      */
     public function bootstrapTypo3Environment(SuiteEvent $suiteEvent)
     {
+        # var_dump(['$this->config' => $this->config]);
         if (!$this->config['typo3Setup']) {
             return;
         }
         $testbase = new Testbase();
-        $testbase->defineOriginalRootPath();
-        $testbase->createDirectory(ORIGINAL_ROOT . 'typo3temp/var/tests/acceptance');
-        $testbase->createDirectory(ORIGINAL_ROOT . 'typo3temp/var/transient');
+        $testbase->defineOriginalWebRootPath();
+        $testbase->defineOriginalAppRootPath();
+        $testbase->createDirectory(ORIGINAL_WEB_ROOT . 'typo3temp/var/tests/acceptance');
+        $testbase->createDirectory(ORIGINAL_WEB_ROOT . 'typo3temp/var/transient');
 
-        $instancePath = ORIGINAL_ROOT . 'typo3temp/var/tests/acceptance';
+        $instancePath = ORIGINAL_WEB_ROOT . 'typo3temp/var/tests/acceptance';
         putenv('TYPO3_PATH_ROOT=' . $instancePath);
         putenv('TYPO3_PATH_APP=' . $instancePath);
         $testbase->setTypo3TestingContext();
