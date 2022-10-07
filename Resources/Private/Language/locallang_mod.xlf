@@ -12,6 +12,9 @@
 			<trans-unit id="mlang_tabs_tab" resname="mlang_tabs_tab">
 				<source>Screenshots</source>
 			</trans-unit>
+			<trans-unit id="button.doCompare" resname="button.doCompare">
+				<source>Compare screenshots &amp; text files</source>
+			</trans-unit>
 			<trans-unit id="button.copyscreenshots" resname="button.copyscreenshots">
 				<source>Copy %d screenshots &amp; %d text files</source>
 			</trans-unit>
