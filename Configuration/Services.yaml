@@ -1,4 +1,8 @@
 services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
   TYPO3\Documentation\Screenshots\Command\CleanUpCommand:
     tags:
       - name: 'console.command'
@@ -15,4 +19,7 @@ services:
     tags:
       - name: 'console.command'
         command: 'screenshots:mappings'
-  TYPO3\Documentation\Screenshots\Configuration\ConfigurationRepository:
+  TYPO3\Documentation\Screenshots\Controller\ScreenshotsManagerController:
+    public: true
+    tags: [ 'backend.controller' ]
+

@@ -15,6 +15,15 @@
 			<trans-unit id="button.copyscreenshots" resname="button.copyscreenshots">
 				<source>Copy %d screenshots &amp; %d text files</source>
 			</trans-unit>
+			<trans-unit id="module.menu.index" resname="module.menu.index">
+				<source>Overview</source>
+			</trans-unit>
+			<trans-unit id="module.menu.make" resname="module.menu.make">
+				<source>Make screenshots</source>
+			</trans-unit>
+			<trans-unit id="module.menu.compare" resname="module.menu.compare">
+				<source>Compare &amp; copy screenshots</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

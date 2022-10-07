@@ -12,9 +12,21 @@ namespace TYPO3\Documentation\Screenshots\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+# use Psr\Log\LoggerAwareInterface;
+# use Psr\Log\LoggerAwareTrait;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
@@ -38,6 +50,16 @@ class ScreenshotsManagerController extends ActionController
         $this->pageRenderer = $pageRenderer;
     }
 
+    /**
+     * Function will be called before every other action
+     */
+    protected function initializeAction()
+    {
+        $this->pageUid = (int)($this->request->getQueryParams()['id'] ?? 0);
+        // $this->screenshotsConfig = $this->extensionConfiguration->get('screenshots') ?? [];
+        parent::initializeAction();
+    }
+
     protected function initializeView($view)
     {
         $this->pageRenderer->addInlineLanguageLabelFile('EXT:screenshots/Resources/Private/Language/locallang_mod.xlf');
@@ -45,10 +67,78 @@ class ScreenshotsManagerController extends ActionController
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Screenshots/ScreenshotsManager');
     }
 
-    public function indexAction()
+    /**
+     * Generates the action menu
+     */
+    protected function initializeModuleTemplate(ServerRequestInterface $request): ModuleTemplate
     {
-        $this->view->assign('pathOriginal', $this->getExtensionConfiguration()->getOriginalPath());
-        $this->view->assign('pathActual', $this->getExtensionConfiguration()->getActualPath());
+        $menuItems = [
+            'index' => [
+                'controller' => 'ScreenshotsManager',
+                'action' => 'index',
+                'label' => $this->getLanguageService()->sL('LLL:EXT:screenshots/Resources/Private/Language/locallang_mod.xlf:module.menu.index'),
+            ],
+            'make' => [
+                'controller' => 'ScreenshotsManager',
+                'action' => 'make',
+                'label' => $this->getLanguageService()->sL('LLL:EXT:screenshots/Resources/Private/Language/locallang_mod.xlf:module.menu.make'),
+            ],
+            'compare' => [
+                'controller' => 'ScreenshotsManager',
+                'action' => 'compare',
+                'label' => $this->getLanguageService()->sL('LLL:EXT:screenshots/Resources/Private/Language/locallang_mod.xlf:module.menu.compare'),
+            ],
+        ];
+        $view = $this->moduleTemplateFactory->create($request);
+
+        $menu = $view->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+        $menu->setIdentifier('ScreenshotsModuleMenu');
+
+        $context = '';
+        foreach ($menuItems as $menuItemConfig) {
+            $isActive = $this->request->getControllerActionName() === $menuItemConfig['action'];
+            $menuItem = $menu->makeMenuItem()
+                ->setTitle($menuItemConfig['label'])
+                ->setHref($this->uriBuilder->reset()->uriFor($menuItemConfig['action'], [], $menuItemConfig['controller']))
+                ->setActive($isActive);
+            $menu->addMenuItem($menuItem);
+            if ($isActive) {
+                $context = $menuItemConfig['label'];
+            }
+        }
+
+        $view->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
+
+        $view->setTitle(
+            $this->getLanguageService()->sL('LLL:EXT:screenshots/Resources/Private/Language/locallang_mod.xlf:module.tabs.tab'),
+            $context
+        );
+
+        $permissionClause = $this->getBackendUser()->getPagePermsClause(Permission::PAGE_SHOW);
+        $pageRecord = BackendUtility::readPageAccess($this->pageUid, $permissionClause);
+        if ($pageRecord) {
+            $view->getDocHeaderComponent()->setMetaInformation($pageRecord);
+        }
+        $view->setFlashMessageQueue($this->getFlashMessageQueue());
+
+        return $view;
+    }
+
+    public function __construct(
+        protected readonly ModuleTemplateFactory $moduleTemplateFactory,
+        protected readonly IconFactory $iconFactory
+    ) {
+    }
+
+    public function indexAction(): ResponseInterface
+    {
+        #var_dump($this->getExtensionConfiguration());
+        $view = $this->initializeModuleTemplate($this->request);
+        $view->assignMultiple([
+            'pathOriginal' => $this->getExtensionConfiguration()->getOriginalPath(),
+            'pathActual' => $this->getExtensionConfiguration()->getActualPath()
+        ]);
+        return $view->renderResponse();
     }
 
     public function makeAction(
@@ -56,7 +146,7 @@ class ScreenshotsManagerController extends ActionController
         string $pathFilter = '',
         string $suiteIdFilter = '',
         string $actionsIdFilter = ''
-    ): void
+    ): ResponseInterface
     {
         if ($cmd === 'make') {
             $this->make($pathFilter, $suiteIdFilter, $actionsIdFilter);
@@ -76,13 +166,17 @@ class ScreenshotsManagerController extends ActionController
             }
         }
 
-        $this->view->assign('cmd', $cmd);
-        $this->view->assign('pathFilter', $pathFilter);
-        $this->view->assign('suiteIdFilter', $suiteIdFilter);
-        $this->view->assign('actionsIdFilter', $actionsIdFilter);
-        $this->view->assign('configurations', $configurations);
-        $this->view->assign('actionsIds', $actionsIds);
-        $this->view->assign('messages', $this->fetchMessages());
+        $view = $this->initializeModuleTemplate($this->request);
+        $view->assignMultiple([
+            'cmd' => $cmd,
+            'pathFilter', $pathFilter,
+            'suiteIdFilter' => $suiteIdFilter,
+            'actionsIdFilter' => $actionsIdFilter,
+            'configurations' => $configurations,
+            'actionsIds' => $actionsIds,
+            'messages' => $this->fetchMessages()
+        ]);
+        return $view->renderResponse();
     }
 
     protected function make(string $pathFilter = '', string $suiteIdFilter = '', string $actionsIdFilter = ''): void
@@ -128,7 +222,6 @@ class ScreenshotsManagerController extends ActionController
             $output = sprintf('$ %s', $command) . "\n";
             $output .= "=> skip" . "\n";
         }
-
         return $output;
     }
 
@@ -140,7 +233,7 @@ class ScreenshotsManagerController extends ActionController
         array $textFilesToCopy = [],
         int $numImages = 0,
         int $numTextFiles = 0
-    ): void
+    ): ResponseInterface
     {
         if ($cmd === 'compare') {
             $this->compare($search, $sorting);
@@ -150,8 +243,12 @@ class ScreenshotsManagerController extends ActionController
             $this->compare($search, $sorting);
         }
 
-        $this->view->assign('cmd', $cmd);
-        $this->view->assign('messages', $this->fetchMessages());
+        $view = $this->initializeModuleTemplate($this->request);
+        $view->assignMultiple([
+            'cmd' => $cmd,
+            'messages' => $this->fetchMessages()
+        ]);
+        return $view->renderResponse();
     }
 
     protected function compare(string $search, string $sorting): void
@@ -454,5 +551,10 @@ class ScreenshotsManagerController extends ActionController
     protected function getConfigurationRepository(string $basePath): ConfigurationRepository
     {
         return GeneralUtility::makeInstance(ConfigurationRepository::class, $basePath);
+    }
+
+    protected function getLanguageService(): LanguageService
+    {
+        return $GLOBALS['LANG'];
     }
 }
