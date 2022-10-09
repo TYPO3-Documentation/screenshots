@@ -159,7 +159,7 @@ abstract class BackendEnvironment extends Extension
      *
      * @var array
      */
-    protected $localConfig = [];
+    // protected $localConfig = [];
 
     /**
      * Events to listen to
@@ -186,7 +186,7 @@ abstract class BackendEnvironment extends Extension
      */
     public function _initialize(): void
     {
-        $this->config = array_replace($this->config, $this->localConfig);
+        //$this->config = array_replace($this->config, $this->localConfig);
         $env = getenv('typo3Setup');
         $this->config['typo3Setup'] = is_string($env)
             ? (trim($env) === 'false' ? false : (bool)$env)

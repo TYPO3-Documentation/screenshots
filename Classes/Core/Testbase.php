@@ -16,11 +16,13 @@ namespace TYPO3\Documentation\Screenshots\Core;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Codeception\Lib\Console\Output;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
+use GuzzleHttp\Client;
 use Psr\Container\ContainerInterface;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Core\ClassLoadingInformation;
@@ -45,6 +47,8 @@ use function PHPUnit\Framework\directoryExists;
  */
 class Testbase
 {
+    //protected Output $output;
+
     /**
      * This class must be called in CLI environment as a security measure
      * against path disclosures and other stuff. Check this within
@@ -56,6 +60,7 @@ class Testbase
         if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
             die('This script supports command line usage only. Please check your command.');
         }
+        //$this->output = new Output($options);
     }
 
     /**
@@ -203,43 +208,109 @@ class Testbase
                 '../../../../' => $instancePath . '/typo3_src',
                 'typo3_src/typo3/sysext/' => $instancePath . '/typo3/sysext',
             ];
-            chdir($instancePath);
-            $this->createDirectory($instancePath . '/typo3');
-            # var_dump([ '$linksToSet' => $linksToSet, 'ORIGINAL_WEB_ROOT' => ORIGINAL_WEB_ROOT, '$sysextPath' => $sysextPath ]);
-            foreach ($linksToSet as $from => $to) {
-                # var_dump([ '$instancePath' => $instancePath, '$from' => $from, 'realpath($from)' => realpath($from) ]);
-                // further check is advisable, if realpath($from) belongs to TYPO3 installation
-                if (realpath($from) !== false) {
-                    $success = symlink(realpath($from), $to);
-                    if (!$success) {
-                        throw new Exception(
-                            'Creating link failed: from ' . $from . ' to: ' . $to,
-                            1376657199
-                        );
-                    }
-                }
-                else {
-                    // @TODO
-                }
-            }
         }
         else {
             // This must be a composer setup
+
+            $vendorPath = rtrim(ORIGINAL_APP_ROOT, '/') . '/vendor/';
+            if (!is_dir($vendorPath)) {
+                throw new Exception(
+                    'Test vendor path ' . $vendorPath . ' not found',
+                    1665216682
+                );
+            }
+            $originalTypo3Version = '';
+            if (is_dir($vendorPath . 'typo3/cms-core')) {
+                $corePath = $vendorPath . '/typo3/cms-core/';
+                $_EXTKEY = 'core';
+                require_once($corePath . 'ext_emconf.php');
+                $originalTypo3Version = $EM_CONF[$_EXTKEY]['version'];
+            }
+            else {
+                throw new Exception(
+                    'Test path for vendor/typo3/cms-core was not found',
+                    1665219015
+                );
+            }
+            $originalTypo3Version = $originalTypo3Version ?: '12';
+            echo '$originalTypo3Version: ' . $originalTypo3Version . "\n";
+
+            if ($originalTypo3Version == '12') {
+                // @TODO:: is there an option to get the original version?
+            }
+
             # throw new Exception('New implementation required!',1376657199);
-            $vendorPath = rtrim(ORIGINAL_APP_ROOT, '/') . '/vendor';
-var_dump([
-    '$linksToSet' => [],
-    '$vendorPath' => $vendorPath,
-    'ORIGINAL_APP_ROOT' => ORIGINAL_APP_ROOT,
-    'ORIGINAL_WEB_ROOT' => ORIGINAL_WEB_ROOT,
-    '$sysextPath' => $sysextPath
-]);
-            #$linksToSet = [
-            #    '../../../../' => $instancePath . '/typo3_src',
-            #    'typo3_src/typo3/sysext/' => $instancePath . '/typo3/sysext',
-            #];
+            chdir(ORIGINAL_WEB_ROOT . 'typo3temp/');
+            $typo3Src = ORIGINAL_WEB_ROOT . 'typo3temp/typo3_src-' . $originalTypo3Version;
+            if (!is_file($typo3Src . '.tgz')) {
+                $client = new Client(['base_uri' => 'https://get.typo3.org/']);
+                $resource = \GuzzleHttp\Psr7\Utils::tryFopen('https://get.typo3.org/' . $originalTypo3Version, 'r');
+                $stream = \GuzzleHttp\Psr7\Utils::streamFor($resource);
+                // ** @var GuzzleHttp\Psr7\Response $download **
+                $download = $client->request('GET', '/' . $originalTypo3Version, ['sink' => './typo3_src-' . $originalTypo3Version  . '.tgz']);
+                # var_dump($download);
+                if (!is_file($typo3Src. '.tgz')) {
+                    throw new Exception(
+                        'The download of https://get.typo3.org/' . $originalTypo3Version . 'was not successful.',
+                        1665219002
+                    );
+                }
+            }
+            if (
+                !is_dir($typo3Src)
+                && is_file($typo3Src . '.tgz')
+            ) {
+                $output=null;
+                $retval=null;
+                exec('tar xzf typo3_src-' . $originalTypo3Version . '.tgz', $output, $retval);
+                // var_dump(['$output' => $output, '$retval' => $retval]);
+                if ($retval !== 0 || $output !==  []) {
+                    // @TODO: message could be more detailed perhaps
+                    throw new Exception(
+                        'Unpacking' . $originalTypo3Version . '.tgz was not successful. '
+                        . 'RETURN CODE: ' . $retval,
+                        1665218990
+                    );
+                }
+                if ($originalTypo3Version == '12') {
+                    // @TODO:: how to get the directory name of the unpacked file?
+                }
+            }
+            $linksToSet = [
+                $typo3Src => $instancePath . '/typo3_src',
+                'typo3_src/typo3/sysext/' => $instancePath . '/typo3/sysext',
+            ];
+            /*
+            var_dump([
+                '$linksToSet' => [],
+                '$vendorPath' => $vendorPath,
+                'ORIGINAL_APP_ROOT' => ORIGINAL_APP_ROOT,
+                'ORIGINAL_WEB_ROOT' => ORIGINAL_WEB_ROOT,
+                '$sysextPath' => $sysextPath
+            ]);
+            */
         }
-echo '$instancePath:' . $instancePath . "\n";
+        # var_dump(['$linksToSet' => $linksToSet]);
+        chdir($instancePath);
+        $this->createDirectory($instancePath . '/typo3');
+        # var_dump([ '$linksToSet' => $linksToSet, 'ORIGINAL_WEB_ROOT' => ORIGINAL_WEB_ROOT, '$sysextPath' => $sysextPath ]);
+        foreach ($linksToSet as $from => $to) {
+            # var_dump([ '$instancePath' => $instancePath, '$from' => $from, 'realpath($from)' => realpath($from) ]);
+            // further check is advisable, if realpath($from) belongs to TYPO3 installation
+            if (realpath($from) !== false) {
+                $success = symlink(realpath($from), $to);
+                if (!$success) {
+                    throw new Exception(
+                        'Creating link failed: from ' . $from . ' to: ' . $to,
+                        1376657199
+                    );
+                }
+            }
+            else {
+                // @TODO
+            }
+        }
+        # echo '$instancePath:' . $instancePath . "\n";
         # die();
         // We can't just link the entry scripts here, because acceptance tests will make use of them
         // and we need Composer Mode to be turned off, thus they need to be rewritten to use the SystemEnvironmentBuilder
@@ -285,13 +356,48 @@ echo '$instancePath:' . $instancePath . "\n";
      */
     public function linkTestExtensionsToInstance($instancePath, array $extensionPaths): void
     {
+        $extensionMapping = [
+            'typo3conf/ext/blog_example' => 't3docs/blog-example',
+            'typo3conf/ext/bootstrap_package' => 'bk2k/bootstrap-package',
+            'typo3conf/ext/styleguide' => 'typo3/cms-styleguide',
+            'typo3conf/ext/examples' => 't3docs/examples',
+            'typo3conf/ext/site_package' => 't3docs/site-package',
+            'typo3conf/ext/restructured_api_tools' => 't3docs/restructured-api-tools',
+            'typo3conf/ext/introduction' => 'typo3/cms-introduction',
+            'typo3conf/ext/screenshots' => 't3docs/screenshots',
+            'typo3conf/ext/extension_builder' => 'friendsoftypo3/extension-builder',
+            'typo3conf/ext/speeddemo' => 'typo3-documentation-team/speeddemo',
+            'typo3conf/ext/news' => 'georgringer/news',
+        ];
         foreach ($extensionPaths as $extensionPath) {
-            $absoluteExtensionPath = ORIGINAL_WEB_ROOT . $extensionPath;
-            if (!is_dir($absoluteExtensionPath)) {
-                throw new Exception(
-                    'Test extension path ' . $absoluteExtensionPath . ' not found',
-                    1376745645
-                );
+            $vendorExtensionPath = ORIGINAL_APP_ROOT . 'vendor/' . $extensionPath;
+            $classicExtensionPath = ORIGINAL_WEB_ROOT . $extensionPath;
+            if (is_dir($vendorExtensionPath)) {
+                $absoluteExtensionPath = $vendorExtensionPath;
+            }
+            elseif (is_dir($classicExtensionPath)) {
+                $absoluteExtensionPath = $classicExtensionPath;
+            }
+            else {
+                if (str_starts_with($extensionPath, 'typo3conf/ext')) {
+                    $vendorExtensionPath = ORIGINAL_APP_ROOT . 'vendor/' . $extensionMapping[$extensionPath];
+                    if (is_dir($vendorExtensionPath)) {
+                        $absoluteExtensionPath = $vendorExtensionPath;
+                        // $this->output->debug('The path ' . $extensionPath . ' should be adjusted to ' . $vendorExtensionPath . '.');
+                    }
+                    else {
+                        throw new Exception(
+                            'Test extension path could not be found. These directories were checked: '
+                            . '- ' . $vendorExtensionPath
+                            . ' - ' . $classicExtensionPath
+                            . '- ' . ORIGINAL_APP_ROOT
+                            . ' - ' . ORIGINAL_WEB_ROOT,
+                            1376745645
+                        );
+                    }
+                } else {
+
+                }
             }
             $destinationPath = $instancePath . '/typo3conf/ext/' . basename($absoluteExtensionPath);
             $success = symlink($absoluteExtensionPath, $destinationPath);
@@ -522,7 +628,22 @@ echo '$instancePath:' . $instancePath . "\n";
     public function setUpLocalConfiguration($instancePath, array $configuration, array $overruleConfiguration): void
     {
         // Base of final LocalConfiguration is core factory configuration
-        $finalConfigurationArray = require ORIGINAL_WEB_ROOT . 'typo3/sysext/core/Configuration/FactoryConfiguration.php';
+        $scriptVendorPath = ORIGINAL_APP_ROOT . 'vendor/typo3/cms-core/Configuration/FactoryConfiguration.php';
+        $scriptWebPath = ORIGINAL_WEB_ROOT . 'typo3/sysext/core/Configuration/FactoryConfiguration.php';
+        $finalConfigurationPath = null;
+        if (is_file($scriptVendorPath)) {
+            $finalConfigurationPath = $scriptVendorPath;
+        }
+        elseif (is_file($scriptWebPath)) {
+            $finalConfigurationPath = $scriptWebPath;
+        }
+        else {
+            throw new Exception(
+                'The path for the script core/Configuration/FactoryConfiguration.php coudn\'t be found.',
+                1665228537
+            );
+        }
+        $finalConfigurationArray = require $finalConfigurationPath;
         $finalConfigurationArray = array_replace_recursive($finalConfigurationArray, $configuration);
         $finalConfigurationArray = array_replace_recursive($finalConfigurationArray, $overruleConfiguration);
         $result = file_put_contents(
