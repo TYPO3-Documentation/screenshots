@@ -239,7 +239,6 @@ class Testbase
                 // @TODO:: is there an option to get the original version?
             }
 
-            # throw new Exception('New implementation required!',1376657199);
             chdir(ORIGINAL_WEB_ROOT . 'typo3temp/');
             $typo3Src = ORIGINAL_WEB_ROOT . 'typo3temp/typo3_src-' . $originalTypo3Version;
             if (!is_file($typo3Src . '.tgz')) {
@@ -280,17 +279,8 @@ class Testbase
                 $typo3Src => $instancePath . '/typo3_src',
                 'typo3_src/typo3/sysext/' => $instancePath . '/typo3/sysext',
             ];
-            /*
-            var_dump([
-                '$linksToSet' => [],
-                '$vendorPath' => $vendorPath,
-                'ORIGINAL_APP_ROOT' => ORIGINAL_APP_ROOT,
-                'ORIGINAL_WEB_ROOT' => ORIGINAL_WEB_ROOT,
-                '$sysextPath' => $sysextPath
-            ]);
-            */
         }
-        # var_dump(['$linksToSet' => $linksToSet]);
+
         chdir($instancePath);
         $this->createDirectory($instancePath . '/typo3');
         # var_dump([ '$linksToSet' => $linksToSet, 'ORIGINAL_WEB_ROOT' => ORIGINAL_WEB_ROOT, '$sysextPath' => $sysextPath ]);
@@ -310,8 +300,7 @@ class Testbase
                 // @TODO
             }
         }
-        # echo '$instancePath:' . $instancePath . "\n";
-        # die();
+
         // We can't just link the entry scripts here, because acceptance tests will make use of them
         // and we need Composer Mode to be turned off, thus they need to be rewritten to use the SystemEnvironmentBuilder
         // of the testing framework.
@@ -389,14 +378,12 @@ class Testbase
                         throw new Exception(
                             'Test extension path could not be found. These directories were checked: '
                             . '- ' . $vendorExtensionPath
-                            . ' - ' . $classicExtensionPath
-                            . '- ' . ORIGINAL_APP_ROOT
-                            . ' - ' . ORIGINAL_WEB_ROOT,
+                            . ' - ' . $classicExtensionPath,
                             1376745645
                         );
                     }
                 } else {
-
+                    // @TODO: map in the other direction
                 }
             }
             $destinationPath = $instancePath . '/typo3conf/ext/' . basename($absoluteExtensionPath);
@@ -639,7 +626,7 @@ class Testbase
         }
         else {
             throw new Exception(
-                'The path for the script core/Configuration/FactoryConfiguration.php coudn\'t be found.',
+                'The path for the script core/Configuration/FactoryConfiguration.php could not be found.',
                 1665228537
             );
         }

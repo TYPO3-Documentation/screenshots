@@ -186,7 +186,6 @@ abstract class BackendEnvironment extends Extension
      */
     public function _initialize(): void
     {
-        //$this->config = array_replace($this->config, $this->localConfig);
         $env = getenv('typo3Setup');
         $this->config['typo3Setup'] = is_string($env)
             ? (trim($env) === 'false' ? false : (bool)$env)
@@ -222,7 +221,6 @@ abstract class BackendEnvironment extends Extension
      */
     public function bootstrapTypo3Environment(SuiteEvent $suiteEvent)
     {
-        # var_dump(['$this->config' => $this->config]);
         if (!$this->config['typo3Setup']) {
             return;
         }
