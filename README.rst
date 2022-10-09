@@ -1,13 +1,16 @@
-# TYPO3 extension "Screenshots"
+TYPO3 extension "Screenshots"
+=============================
 
 This extension is producing automated screenshots and gathering code-snippets from documentation.
 The kind of the documentation and the screenshots can be configured, so that also unknown documents can be processed.
 By default a list of the important TYPO3 documentation is used and can also be downloaded automatically. Included are also the documentations for the extensions `extension_builder` and `styleguide`.
 
-## Version
+Version
+-------
 This version is intended to run on TYPO3 v12.
 
-## Requirements
+Requirements
+------------
 
  - The command `jq` has to be available in the Operating System and can be installed with `sudo apt-get install jq` on linux if it's missing.
    For Windows `jq` is available too i.e. on https://stedolan.github.io/jq/download/.
@@ -19,11 +22,13 @@ This version is intended to run on TYPO3 v12.
    - libxml
  - @TODO: selenium, ...
 
-## FURTHER Information
+Further Information
+-------------------
 
 the following information might be outdated ot not applicable partially
 and is copied from the framework "t3docs/screenshots-app" which includes
-TYPO3 and a set of special extensions.
+TYPO3 and a set of special extensions including the predecessor of this
+extension.
 
 
 =================
@@ -44,7 +49,7 @@ configured for use by the screenshot runner in the ``screenshots.json` file.
 
 Activity of the screenshots runner:
 
-.. image:: docs/screenshots_runner_diagram.png
+.. image:: Documentation/Images/screenshots_runner_diagram.png
 :alt: Activity diagram of the screenshots runner
 
 .. contents:: Table of Contents
@@ -734,7 +739,7 @@ On the welcome page you can select the action you want to perform:
 - create screenshots by processing the available ``screenshots.json`` through the screenshots runner or
 - compare new screenshots with the originals and copy the new screenshots
 
-.. image:: docs/screenshots_manager_welcome.png
+.. image:: Documentation/Images/screenshots_manager_welcome.png
 
 Make screenshots
 ----------------
@@ -742,7 +747,7 @@ Make screenshots
 On this page you automatically start the screenshots runner, which starts a subprocess on the command line.
 The result is displayed on this page as soon as the runner is finished - which may take a while.
 
-.. image:: docs/screenshots_manager_make.png
+.. image:: Documentation/Images/screenshots_manager_make.png
 
 To comfortably work with a large number of ``screenhots.json`` and actions, the number of actions can be reduced by
 using the filter at the top of the page: Only actions matching the path, suite ID and actions ID criteria will then be
@@ -758,20 +763,20 @@ the difference as a number.
 Each screenshot is selected for copying by default, but can be deselected individually and in the aggregation. The same
 applies to text files such as the screenshot reST include files or the code snippets.
 
-.. image:: docs/screenshots_manager_compare.png
+.. image:: Documentation/Images/screenshots_manager_compare.png
 
 To work comfortably with a large number of files, the list of screenshots and text files can be reduced by entering
 a path in the search field at the top of the page: Only files with a matching path will then be displayed. Regular
 expressions are supported and automatic suggestion of available paths is enabled.
 
-.. image:: docs/screenshots_manager_compare_searchbox.png
+.. image:: Documentation/Images/screenshots_manager_compare_searchbox.png
 
 Optionally sort the list by criteria, such as difference, file name or file path.
 
 When you have confirmed the changes, pressing the "Copy screenshots" button will copy the screenshots to the original
 location.
 
-.. image:: docs/screenshots_manager_copy.png
+.. image:: Documentation/Images/screenshots_manager_copy.png
 
 Eventually, the original screenshots were updated and the changes can be committed and pushed.
 
