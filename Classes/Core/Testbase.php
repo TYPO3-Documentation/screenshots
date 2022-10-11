@@ -247,7 +247,7 @@ class Testbase
                 $stream = \GuzzleHttp\Psr7\Utils::streamFor($resource);
                 // ** @var GuzzleHttp\Psr7\Response $download **
                 $download = $client->request('GET', '/' . $originalTypo3Version, ['sink' => './typo3_src-' . $originalTypo3Version  . '.tgz']);
-                # var_dump($download);
+# var_dump($download);
                 if (!is_file($typo3Src. '.tgz')) {
                     throw new Exception(
                         'The download of https://get.typo3.org/' . $originalTypo3Version . 'was not successful.',
@@ -262,7 +262,7 @@ class Testbase
                 $output=null;
                 $retval=null;
                 exec('tar xzf typo3_src-' . $originalTypo3Version . '.tgz', $output, $retval);
-                // var_dump(['$output' => $output, '$retval' => $retval]);
+// var_dump(['$output' => $output, '$retval' => $retval]);
                 if ($retval !== 0 || $output !==  []) {
                     // @TODO: message could be more detailed perhaps
                     throw new Exception(
@@ -283,9 +283,9 @@ class Testbase
 
         chdir($instancePath);
         $this->createDirectory($instancePath . '/typo3');
-        # var_dump([ '$linksToSet' => $linksToSet, 'ORIGINAL_WEB_ROOT' => ORIGINAL_WEB_ROOT, '$sysextPath' => $sysextPath ]);
+# var_dump([ '$linksToSet' => $linksToSet, 'ORIGINAL_WEB_ROOT' => ORIGINAL_WEB_ROOT, '$sysextPath' => $sysextPath ]);
         foreach ($linksToSet as $from => $to) {
-            # var_dump([ '$instancePath' => $instancePath, '$from' => $from, 'realpath($from)' => realpath($from) ]);
+# var_dump([ '$instancePath' => $instancePath, '$from' => $from, 'realpath($from)' => realpath($from) ]);
             // further check is advisable, if realpath($from) belongs to TYPO3 installation
             if (realpath($from) !== false) {
                 $success = symlink(realpath($from), $to);
@@ -355,7 +355,6 @@ class Testbase
             'typo3conf/ext/introduction' => 'typo3/cms-introduction',
             'typo3conf/ext/screenshots' => 't3docs/screenshots',
             'typo3conf/ext/extension_builder' => 'friendsoftypo3/extension-builder',
-            'typo3conf/ext/speeddemo' => 'typo3-documentation-team/speeddemo',
             'typo3conf/ext/news' => 'georgringer/news',
         ];
         foreach ($extensionPaths as $extensionPath) {
@@ -376,14 +375,21 @@ class Testbase
                     }
                     else {
                         throw new Exception(
-                            'Test extension path could not be found. These directories were checked: '
-                            . '- ' . $vendorExtensionPath
-                            . ' - ' . $classicExtensionPath,
+                            'Test extension path could not be found. ' . "\n"
+                            . 'These directories were checked: ' . "\n"
+                            . '- ' . $vendorExtensionPath . "\n"
+                            . '- ' . $classicExtensionPath . "\n",
                             1376745645
                         );
                     }
                 } else {
-                    // @TODO: map in the other direction
+                    throw new Exception(
+                        'Test extension path could not be found. ' . "\n"
+                        . 'These directories were checked: ' . "\n"
+                        . '- ' . $vendorExtensionPath . "\n"
+                        . '- ' . $classicExtensionPath . "\n",
+                        1376745646
+                    );
                 }
             }
             $destinationPath = $instancePath . '/typo3conf/ext/' . basename($absoluteExtensionPath);
@@ -791,12 +797,14 @@ class Testbase
 
         // Reset state from a possible previous run
         GeneralUtility::purgeInstances();
+/*
 echo '$instancePath: ' . $instancePath . "\n";
 echo '$relExtensionrootPath: ' . realpath($relExtensionrootPath) . "\n";
 \TYPO3\CMS\Core\Core\SystemEnvironmentBuilder::run();
 var_dump(Environment::toArray());
 echo 'getenv(\'TYPO3_PATH_ROOT\'): ' . getenv('TYPO3_PATH_ROOT') . "\n";
 echo '$this->getPackagesPath(): ' . $this->getPackagesPath() . "\n";
+*/
         if (
             is_dir($relExtensionrootPath . '../t3docs')
             && is_dir($relExtensionrootPath . '../../vendor')
@@ -1061,7 +1069,7 @@ echo '$this->getPackagesPath(): ' . $this->getPackagesPath() . "\n";
         } else {
             $typo3_path_root = getenv('TYPO3_PATH_ROOT');
         }
-        $packagesPath = $typo3_path_root . '/../vendor';
+        $packagesPath = $typo3_path_root . '/../vendor/';
         if (!is_dir($packagesPath)) {
             // @TODO
             echo '$packagesPath not found';

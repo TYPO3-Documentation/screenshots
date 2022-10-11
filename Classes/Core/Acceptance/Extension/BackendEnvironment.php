@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\Documentation\Screenshots\Core\Functional\Framework\DataHandling\DataSet;
 use TYPO3\Documentation\Screenshots\Core\Testbase;
+use function PHPUnit\Framework\throwException;
 
 /**
  * This codeception extension creates a full TYPO3 instance within
@@ -159,7 +160,7 @@ abstract class BackendEnvironment extends Extension
      *
      * @var array
      */
-    // protected $localConfig = [];
+    protected $localConfig = [];
 
     /**
      * Events to listen to
@@ -186,6 +187,7 @@ abstract class BackendEnvironment extends Extension
      */
     public function _initialize(): void
     {
+        $this->config = array_replace($this->config, $this->localConfig);
         $env = getenv('typo3Setup');
         $this->config['typo3Setup'] = is_string($env)
             ? (trim($env) === 'false' ? false : (bool)$env)
@@ -208,7 +210,7 @@ abstract class BackendEnvironment extends Extension
         $this->config['typo3DatabaseDriver'] = is_string($env) ? trim($env) : $this->config['typo3DatabaseDriver'];
         $env = getenv('typo3DatabaseCharset');
         $this->config['typo3DatabaseCharset'] = is_string($env) ? trim($env) : $this->config['typo3DatabaseCharset'];
-        # var_dump(getenv());
+# var_dump(getenv());
     }
 
     /**
@@ -219,7 +221,7 @@ abstract class BackendEnvironment extends Extension
      *
      * @param SuiteEvent $suiteEvent
      */
-    public function bootstrapTypo3Environment(SuiteEvent $suiteEvent)
+    public function bootstrapTypo3Environment(SuiteEvent $suiteEvent): void
     {
         if (!$this->config['typo3Setup']) {
             return;

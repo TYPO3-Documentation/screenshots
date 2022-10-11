@@ -18,8 +18,6 @@ namespace TYPO3\Documentation\Screenshots\Core\Functional;
 
 use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
-use PHPUnit\Framework\RiskyTestError;
-use PHPUnit\Util\ErrorHandler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -337,7 +335,6 @@ abstract class FunctionalTestCase extends BaseTestCase implements ContainerInter
             $localConfiguration['SYS']['caching']['cacheConfigurations']['hash']['backend'] = 'TYPO3\\CMS\\Core\\Cache\\Backend\\NullBackend';
             $localConfiguration['SYS']['caching']['cacheConfigurations']['imagesizes']['backend'] = 'TYPO3\\CMS\\Core\\Cache\\Backend\\NullBackend';
             $localConfiguration['SYS']['caching']['cacheConfigurations']['pages']['backend'] = 'TYPO3\\CMS\\Core\\Cache\\Backend\\NullBackend';
-            $localConfiguration['SYS']['caching']['cacheConfigurations']['pagesection']['backend'] = 'TYPO3\\CMS\\Core\\Cache\\Backend\\NullBackend';
             $localConfiguration['SYS']['caching']['cacheConfigurations']['rootline']['backend'] = 'TYPO3\\CMS\\Core\\Cache\\Backend\\NullBackend';
             $testbase->setUpLocalConfiguration($this->instancePath, $localConfiguration, $this->configurationToUseInTestInstance);
             $defaultCoreExtensionsToLoad = [
@@ -346,7 +343,6 @@ abstract class FunctionalTestCase extends BaseTestCase implements ContainerInter
                 'frontend',
                 'extbase',
                 'install',
-                'recordlist',
                 'fluid',
             ];
             $testbase->setUpPackageStates(
@@ -377,6 +373,8 @@ abstract class FunctionalTestCase extends BaseTestCase implements ContainerInter
                 }
             }
         }
+
+        parent::setUp();
     }
 
     /**
@@ -392,33 +390,7 @@ abstract class FunctionalTestCase extends BaseTestCase implements ContainerInter
         unset($this->pathsToProvideInTestInstance, $this->configurationToUseInTestInstance);
         unset($this->additionalFoldersToCreate);
 
-        // Verify no dangling error handler is registered. This might happen when
-        // tests register an own error handler which is not reset again. This error
-        // handler then may "eat" error of subsequent tests.
-        // Register a dummy error handler to retrieve *previous* one and unregister dummy again,
-        // then verify previous is the phpunit error handler. This will mark the one test that
-        // fails to unset/restore it's custom error handler as "risky".
-        // @todo: Consider moving this to BaseTestCase to have it for unit tests, too.
-        // @see: https://github.com/sebastianbergmann/phpunit/issues/4801
-        $previousErrorHandler = set_error_handler(function (int $errorNumber, string $errorString, string $errorFile, int $errorLine): bool {return false;});
-        restore_error_handler();
-        if (!$previousErrorHandler instanceof ErrorHandler) {
-            throw new RiskyTestError(
-                'tearDown() check: A dangling error handler has been found. Use restore_error_handler() to unset it.',
-                1634490417
-            );
-        }
-
-        // Verify no dangling exception handler is registered. Same scenario as with error handlers.
-        // @todo: Consider moving this to BaseTestCase to have it for unit tests, too.
-        $previousExceptionHandler = set_exception_handler(function () {});
-        restore_exception_handler();
-        if ($previousExceptionHandler !== null) {
-            throw new RiskyTestError(
-                'tearDown() check: A dangling exception handler has been found. Use restore_exception_handler() to unset it.',
-                1634490418
-            );
-        }
+        parent::tearDown();
     }
 
     protected function getConnectionPool(): ConnectionPool
@@ -473,9 +445,8 @@ abstract class FunctionalTestCase extends BaseTestCase implements ContainerInter
         $userRow = $this->getBackendUserRecordFromDatabase($userUid);
         $backendUser = GeneralUtility::makeInstance(BackendUserAuthentication::class);
         $session = $backendUser->createUserSession($userRow);
-        $sessionId = $session->getIdentifier();
         $request = $this->createServerRequest('https://typo3-testing.local/typo3/');
-        $request = $request->withCookieParams(['be_typo_user' => $sessionId]);
+        $request = $request->withCookieParams(['be_typo_user' => $session->getJwt()]);
         $backendUser = $this->authenticateBackendUser($backendUser, $request);
         // @todo: remove this with the next major version
         $GLOBALS['BE_USER'] = $backendUser;
@@ -975,13 +946,6 @@ abstract class FunctionalTestCase extends BaseTestCase implements ContainerInter
         $_SERVER['HTTP_HOST'] = $_SERVER['SERVER_NAME'] = $request->getUri()->getHost() ?: 'localhost';
 
         $container = Bootstrap::init(ClassLoadingInformation::getClassLoader());
-
-        // The testing-framework registers extension 'json_response' that brings some middlewares which
-        // allow to eg. log in backend users in frontend application context. These globals are used to
-        // carry that information.
-        // @todo This global can be removed, after Instructions are handled using the ServerRequest
-        //       directly instead of loading the RequestBootstrap and thus this global handover.
-        $_SERVER['X_TYPO3_TESTING_FRAMEWORK']['request'] = $request;
 
         /** @var InternalRequest $serverRequest */
         $serverRequest = $request->withAttribute('typo3.testing.context', $context);

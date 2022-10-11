@@ -12,7 +12,7 @@ namespace TYPO3\Documentation\Screenshots\Runner\Codeception\Support\Extension;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Codeception\Event\TestEvent;
+use Codeception\Event\SuiteEvent;
 use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\Documentation\Screenshots\Core\Acceptance\Extension\BackendEnvironment;
@@ -76,9 +76,9 @@ class InstallEnvironment extends BackendEnvironment
     /**
      * Initialize TYPO3 instance
      *
-     * @param TestEvent $event
+     * @param SuiteEvent $event
      */
-    public function bootstrapTypo3Environment(TestEvent $event): void
+    public function bootstrapTypo3Environment(SuiteEvent $event): void
     {
         parent::bootstrapTypo3Environment($event);
 

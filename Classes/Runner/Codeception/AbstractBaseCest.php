@@ -82,6 +82,7 @@ abstract class AbstractBaseCest
 
     protected function handleAction(Photographer $I, array $action)
     {
+# var_dump([__METHOD__.';'.__LINE__, 'action' => $action, 'Photographer $I' => $I]);
         if (isset($action['comment'])) {
             $this->printComment($action);
         } elseif (isset($action['action'])) {
@@ -102,9 +103,10 @@ abstract class AbstractBaseCest
     protected function runAction(Photographer $I, array $action)
     {
         $name = $action['action'];
+# var_dump([__METHOD__.';'.__LINE__, 'action' => $name]);
         unset($action['action']);
         $params = $this->mapAssociativeArrayToActionParams(Photographer::class, $name, $action);
-
+# var_dump([__METHOD__.';'.__LINE__, '$params' => $params]);
         foreach ($params as &$param) {
             if (is_array($param) && isset($param['action'])) {
                 $param = $this->runAction($I, $param);

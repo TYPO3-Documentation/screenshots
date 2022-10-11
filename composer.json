@@ -6,11 +6,41 @@
         "GPL-2.0-or-later"
     ],
     "require": {
-        "typo3/cms-core": "^12.0"
+        "php": "^8.1",
+        "ext-pdo": "*",
+        "ext-curl": "*",
+        "ext-dom": "*",
+        "ext-imagick": "*",
+        "ext-json": "*",
+        "ext-libxml": "*",
+        "phpunit/phpunit": "^9.5.25",
+        "psr/container": "^1.1.0 || ^2.0.0",
+        "typo3/cms-core": "^12.0 || 12.*.*@dev",
+        "typo3/cms-backend": "^12.0 || 12.*.*@dev",
+        "typo3/cms-frontend": "^12.0 || 12.*.*@dev",
+        "typo3/cms-extbase": "^12.0 || 12.*.*@dev",
+        "typo3/cms-fluid": "^12.0 || 12.*.*@dev",
+        "typo3/cms-install": "^12.0 || 12.*.*@dev",
+        "guzzlehttp/psr7": "^1.7 || ^2.0",
+        "sensiolabs/ansi-to-html": "^1.2",
+        "sebastian/diff": "^4.0",
+        "codeception/codeception": "^5.0",
+        "codeception/module-webdriver": "^3.1",
+        "mikey179/vfsstream": "^1.6"
+    },
+    "suggest": {
+        "friendsoftypo3/extension-builder": "Some screenshots are by default taken from this extension",
+        "georgringer/news": "Some screenshots are by default taken from this extension",
+        "t3docs/site-package": "Some screenshots are by default taken from this extension",
+        "t3docs/examples": "Some screenshots are by default taken from this extension",
+        "typo3/cms-introduction": "Some screenshots are by default taken from this extension",
+        "typo3/cms-styleguide": "Some screenshots are by default taken from this extension",
+        "typo3/cms-workspaces": "Some screenshots are by default taken from this extension"
     },
     "autoload": {
         "psr-4": {
-            "TYPO3\\Documentation\\Screenshots\\": "Classes/"
+            "TYPO3\\Documentation\\Screenshots\\": "Classes/",
+            "TYPO3\\Documentation\\Screenshots\\Tests\\": "Tests/"
         }
     },
     "extra": {

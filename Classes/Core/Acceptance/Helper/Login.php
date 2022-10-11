@@ -20,16 +20,22 @@ use Codeception\Exception\ConfigurationException;
 use Codeception\Module;
 use Codeception\Module\WebDriver;
 use Codeception\Util\Locator;
+use TYPO3\CMS\Core\Security\JwtTrait;
+use TYPO3\CMS\Core\Session\UserSession;
 
 /**
  * Helper class to log in backend users and load backend.
  */
 class Login extends Module
 {
+    use JwtTrait;
+
     /**
      * @var array Filled by .yml config with valid sessions per role
      */
-    // protected array $config = ['sessions' => [],];
+    protected array $config = [
+        'sessions' => [],
+    ];
 
     /**
      * Set a backend user session cookie and load the backend index.php.
@@ -102,8 +108,8 @@ class Login extends Module
     public function _deleteSession()
     {
         $webDriver = $this->getWebDriver();
-        $webDriver->resetCookie('be_typo_user');
-        $webDriver->resetCookie('be_lastLoginProvider');
+        $webDriver->webDriver->manage()->deleteCookieNamed('be_typo_user');
+        $webDriver->webDriver->manage()->deleteCookieNamed('be_lastLoginProvider');
         $webDriver->deleteSessionSnapshot('login');
     }
 
@@ -112,9 +118,17 @@ class Login extends Module
      */
     public function _createSession($userSessionId)
     {
+        $sessionJwt = self::encodeHashSignedJwt(
+            [
+                'identifier' => $userSessionId,
+                'time' => (new \DateTimeImmutable())->format(\DateTimeImmutable::RFC3339),
+            ],
+            // relies on $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']
+            self::createSigningKeyFromEncryptionKey(UserSession::class)
+        );
         $webDriver = $this->getWebDriver();
-        $webDriver->setCookie('be_typo_user', $userSessionId);
-        $webDriver->setCookie('be_lastLoginProvider', '1433416747');
+        $webDriver->setCookie('be_typo_user', $sessionJwt, [], false);
+        $webDriver->setCookie('be_lastLoginProvider', '1433416747', [], false);
         $webDriver->saveSessionSnapshot('login');
     }
 

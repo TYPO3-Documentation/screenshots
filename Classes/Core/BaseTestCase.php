@@ -17,7 +17,9 @@ namespace TYPO3\Documentation\Screenshots\Core;
  */
 
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\RiskyTestError;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Util\ErrorHandler;
 
 /**
  * The mother of all test cases.
@@ -27,6 +29,67 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class BaseTestCase extends TestCase
 {
+    /**
+     * Holds the state of error_reporting during setUp() phase,
+     * which will checked in tearDown() phase to ensure that a
+     * test does not change error_reporting behaviour between tests.
+     */
+    private ?int $backupErrorReporting = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->backupErrorReporting = error_reporting();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        // Verify no dangling error handler is registered. This might happen when
+        // tests register an own error handler which is not reset again. This error
+        // handler then may "eat" error of subsequent tests.
+        // Register a dummy error handler to retrieve *previous* one and unregister dummy again,
+        // then verify previous is the phpunit error handler. This will mark the one test that
+        // fails to unset/restore it's custom error handler as "risky".
+        $previousErrorHandler = set_error_handler(function (int $errorNumber, string $errorString, string $errorFile, int $errorLine): bool {return false;});
+        restore_error_handler();
+        if (!$previousErrorHandler instanceof ErrorHandler) {
+            throw new RiskyTestError(
+                'tearDown() check: A dangling error handler has been found. Use restore_error_handler() to unset it.',
+                1634490417
+            );
+        }
+
+        // Verify no dangling exception handler is registered. Same scenario as with error handlers.
+        $previousExceptionHandler = set_exception_handler(function () {});
+        restore_exception_handler();
+        if ($previousExceptionHandler !== null) {
+            throw new RiskyTestError(
+                'tearDown() check: A dangling exception handler has been found. Use restore_exception_handler() to unset it.',
+                1634490418
+            );
+        }
+
+        if ($this->backupErrorReporting !== null) {
+            $backupErrorReporting = $this->backupErrorReporting;
+            $this->backupErrorReporting = null;
+            $currentErrorReporting = error_reporting();
+            if ($currentErrorReporting !== $backupErrorReporting) {
+                error_reporting($backupErrorReporting);
+            }
+            if ($backupErrorReporting !== $currentErrorReporting) {
+                throw new RiskyTestError(
+                    'tearDown() integrity check found changed error_reporting. Before was '
+                    . $backupErrorReporting . ' compared to current ' . $currentErrorReporting . ' in '
+                    . '"' . get_class($this) . '".'
+                    . 'Please check and verify that this is intended and add proper cleanup to the test.',
+                    1665251711
+                );
+            }
+        }
+    }
+
     /**
      * Creates a mock object which allows for calling protected methods and access of protected properties.
      *
