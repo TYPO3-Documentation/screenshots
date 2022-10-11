@@ -50,7 +50,7 @@ configured for use by the screenshot runner in the ``screenshots.json` file.
 Activity of the screenshots runner:
 
 .. image:: Documentation/Images/screenshots_runner_diagram.png
-:alt: Activity diagram of the screenshots runner
+   :alt: Activity diagram of the screenshots runner
 
 .. contents:: Table of Contents
 
@@ -74,7 +74,7 @@ Installation
 
    .. code-block:: bash
 
-   ddev install
+    ddev install
 
 2. Test the project by
 
@@ -109,7 +109,7 @@ Start the project by
 
 .. code-block:: bash
 
-ddev start
+   ddev start
 
 Stop
 ----
@@ -118,7 +118,7 @@ Stop the project by
 
 .. code-block:: bash
 
-ddev stop
+   ddev stop
 
 Reinstallation
 --------------
@@ -128,13 +128,13 @@ This can be reliably achieved by resetting the project with
 
 .. code-block:: bash
 
-ddev install
+   ddev install
 
 or by resetting a single suite TYPO3 instance with
 
 .. code-block:: bash
 
-ddev install -s [suite-id]
+   ddev install -s [suite-id]
 
 again. Available suite IDs are "core", "examples", "extension-builder", "install", "introduction", "site-package" and
 "styleguide".
@@ -147,13 +147,13 @@ reflect updates of the project composer packages in your suites TYPO3 instances 
 
 .. code-block:: bash
 
-ddev install --initialize-suites-only
+   ddev install --initialize-suites-only
 
 or by reflecting to a single suite TYPO3 instance with
 
 .. code-block:: bash
 
-ddev install --initialize-suites-only -s [suite-id]
+   ddev install --initialize-suites-only -s [suite-id]
 
 Uninstallation
 --------------
@@ -162,7 +162,7 @@ Remove the project by
 
 .. code-block:: bash
 
-ddev delete -yO
+   ddev delete -yO
 
 
 .. _browsable-typo3-instances:
@@ -205,22 +205,22 @@ projects in one bundle (requires access permission) by
 
 .. code-block:: bash
 
-ddev auth ssh
-ddev fetch-manuals
+   ddev auth ssh
+   ddev fetch-manuals
 
 or limit it to either the official TYPO3 Documentation manuals with
 
 .. code-block:: bash
 
-ddev auth ssh
-ddev fetch-manuals -c documentation
+   ddev auth ssh
+   ddev fetch-manuals -c documentation
 
 or the officially supported TYPO3 projects with
 
 .. code-block:: bash
 
-ddev auth ssh
-ddev fetch-manuals -c application
+   ddev auth ssh
+   ddev fetch-manuals -c application
 
 File ``screenshots.json``
 -------------------------
@@ -237,7 +237,7 @@ Create a basic ``screenshots.json`` in an arbitrary manual folder at ``public/t3
 
 .. code-block:: bash
 
-ddev init-screenshot-json [-t folder]
+   ddev init-screenshot-json [-t folder]
 
 where ``folder`` defaults to ``My-Manual`` if left blank.
 
@@ -245,64 +245,64 @@ This is a small runner configuration which takes screenshots of all available su
 
 .. code-block:: json
 
-{
-"suites": {
-"Core": {
-"screenshots": [
-[
-{"action": "makeScreenshotOfWindow", "fileName": "CoreDashboard"}
-]
-]
-},
-"Examples": {
-"screenshots": [
-[
-{"action": "makeScreenshotOfFullPage", "fileName": "ExamplesDashboardFullPage"}
-]
-]
-},
-"ExtensionBuilder": {
-"screenshots": [
-[
-{"action": "see", "text": "Extension Builder"},
-{"action": "click", "link": "Extension Builder"},
-{"action": "makeScreenshotOfFullPage", "fileName": "ExtensionBuilderFullPage"}
-]
-]
-},
-"Install": {
-"screenshots": [
-[
-{"action": "makeScreenshotOfFullPage", "fileName": "InstallationFullPage"}
-]
-]
-},
-"Introduction": {
-"screenshots": [
-[
-{"action": "makeScreenshotOfFullPage", "fileName": "IntroductionDashboardFullPage"}
-]
-]
-},
-"SitePackage": {
-"screenshots": [
-[
-{"action": "makeScreenshotOfFullPage", "fileName": "SitePackageDashboardFullPage"}
-]
-]
-},
-"Styleguide": {
-"screenshots": [
-[
-{"action": "makeScreenshotOfRecord", "table": "pages", "uid": 1, "fileName": "StyleguideFirstPageRecord"}
-],
-[
-{"action": "makeScreenshotOfField", "table": "pages", "uid": 1, "fields": "abstract", "fileName": "StyleguideFirstPageRecordWithAbstractFieldOnly"},
-]
-]
-}
-}
-}
+   {
+      "suites": {
+         "Core": {
+            "screenshots": [
+               [
+                  {"action": "makeScreenshotOfWindow", "fileName": "CoreDashboard"}
+               ]
+            ]
+         },
+         "Examples": {
+            "screenshots": [
+               [
+                  {"action": "makeScreenshotOfFullPage", "fileName": "ExamplesDashboardFullPage"}
+               ]
+            ]
+         },
+         "ExtensionBuilder": {
+            "screenshots": [
+               [
+                  {"action": "see", "text": "Extension Builder"},
+                  {"action": "click", "link": "Extension Builder"},
+                  {"action": "makeScreenshotOfFullPage", "fileName": "ExtensionBuilderFullPage"}
+               ]
+            ]
+         },
+         "Install": {
+            "screenshots": [
+               [
+                  {"action": "makeScreenshotOfFullPage", "fileName": "InstallationFullPage"}
+               ]
+            ]
+         },
+         "Introduction": {
+            "screenshots": [
+               [
+                  {"action": "makeScreenshotOfFullPage", "fileName": "IntroductionDashboardFullPage"}
+               ]
+            ]
+         },
+         "SitePackage": {
+            "screenshots": [
+               [
+                  {"action": "makeScreenshotOfFullPage", "fileName": "SitePackageDashboardFullPage"}
+               ]
+            ]
+         },
+         "Styleguide": {
+            "screenshots": [
+               [
+                  {"action": "makeScreenshotOfRecord", "table": "pages", "uid": 1, "fileName": "StyleguideFirstPageRecord"}
+               ],
+               [
+                  {"action": "makeScreenshotOfField", "table": "pages", "uid": 1, "fields": "abstract", "fileName": "StyleguideFirstPageRecordWithAbstractFieldOnly"},
+               ]
+            ]
+         }
+      }
+   }
 
 Screenshots are mainly made by the actions ``makeScreenshotOfWindow``, ``makeScreenshotOfFullPage``,
 ``makeScreenshotOfContentFrame`` and ``makeScreenshotOfElement``, the first one taking a screenshot of the browser
@@ -311,23 +311,23 @@ frame and the last one of a specific DOM element, e.g.
 
 .. code-block:: json
 
-{
-"suites": {
-"Core": {
-"screenshots": [
-[
-{"action": "see", "text": "List"},
-{"action": "click", "link": "List"},
-{"action": "waitForText", "text": "New TYPO3 site"},
-{"action": "makeScreenshotOfWindow", "fileName": "Typo3Window"},
-{"action": "makeScreenshotOfFullPage", "fileName": "Typo3FullPage"},
-{"action": "makeScreenshotOfContentFrame", "fileName": "Typo3ContentFrameOnly"},
-{"action": "makeScreenshotOfElement", "selector": ".topbar-header-site", "fileName": "Typo3ElementOnly"}
-]
-]
-}
-}
-}
+   {
+      "suites": {
+         "Core": {
+            "screenshots": [
+               [
+                  {"action": "see", "text": "List"},
+                  {"action": "click", "link": "List"},
+                  {"action": "waitForText", "text": "New TYPO3 site"},
+                  {"action": "makeScreenshotOfWindow", "fileName": "Typo3Window"},
+                  {"action": "makeScreenshotOfFullPage", "fileName": "Typo3FullPage"},
+                  {"action": "makeScreenshotOfContentFrame", "fileName": "Typo3ContentFrameOnly"},
+                  {"action": "makeScreenshotOfElement", "selector": ".topbar-header-site", "fileName": "Typo3ElementOnly"}
+               ]
+            ]
+         }
+      }
+   }
 
 The captured screenshot might contain too much information that is not needed for the documentation. Therefore it can
 be cropped for the purpose of the documentation - or the width of the documentation page - with ``cropScreenshot``,
@@ -335,18 +335,18 @@ e.g.
 
 .. code-block:: json
 
-{
-"suites": {
-"Introduction": {
-"screenshots": [
-[
-{"action": "makeScreenshotOfFullPage", "fileName": "IntroductionCropRightTop"},
-{"action": "cropScreenshot", "fileName": "IntroductionCropRightTop", "position": "right-top", "height": 400, "width": 400},
-]
-]
-}
-}
-}
+   {
+      "suites": {
+         "Introduction": {
+            "screenshots": [
+               [
+                  {"action": "makeScreenshotOfFullPage", "fileName": "IntroductionCropRightTop"},
+                  {"action": "cropScreenshot", "fileName": "IntroductionCropRightTop", "position": "right-top", "height": 400, "width": 400},
+               ]
+            ]
+         }
+      }
+   }
 
 The target folder of the screenshots is ``Images/AutomaticScreenshots`` by default and is calculated
 relative to the ``screenshots.json``. The path can be adapted by the actions ``setScreenshotsDocumentationPath`` and
@@ -354,19 +354,19 @@ relative to the ``screenshots.json``. The path can be adapted by the actions ``s
 
 .. code-block:: json
 
-{
-"suites": {
-"Introduction": {
-"screenshots": [
-[
-{"action": "setScreenshotsDocumentationPath", "path": "IntroductionDocumentation"},
-{"action": "setScreenshotsImagePath", "path": "Images/IntroductionScreenshots"},
-{"action": "makeScreenshotOfWindow", "fileName": "IntroductionDashboard"}
-]
-]
-}
-}
-}
+   {
+      "suites": {
+         "Introduction": {
+            "screenshots": [
+               [
+                  {"action": "setScreenshotsDocumentationPath", "path": "IntroductionDocumentation"},
+                  {"action": "setScreenshotsImagePath", "path": "Images/IntroductionScreenshots"},
+                  {"action": "makeScreenshotOfWindow", "fileName": "IntroductionDashboard"}
+               ]
+            ]
+         }
+      }
+   }
 
 which would result in a target folder ``IntroductionDocumentation/Images/IntroductionScreenshots``.
 
@@ -375,47 +375,47 @@ navigation actions, e.g.
 
 .. code-block:: json
 
-{
-"suites": {
-"Styleguide": {
-"screenshots": [
-[
-{"action": "switchToMainFrame"},
-{"action": "scrollModuleMenuTo", "toSelector": "#web_list"},
-{"action": "click", "link": "List"},
-{"action": "openPageTreePath", "path": ["styleguide TCA demo", "elements rte"]},
-{"action": "scrollPageTreeTo", "toSelector": "#identifier-0_12"},
-{"action": "switchToContentFrame"},
-{"action": "waitForText", "text": "elements rte", "timeout": 5},
-{"action": "scrollModuleBodyToBottom"},
-{"action": "makeScreenshotOfWindow", "fileName": "StylesheetContentScrolledDown"},
-]
-]
-}
-}
-}
+   {
+      "suites": {
+         "Styleguide": {
+            "screenshots": [
+               [
+                  {"action": "switchToMainFrame"},
+                  {"action": "scrollModuleMenuTo", "toSelector": "#web_list"},
+                  {"action": "click", "link": "List"},
+                  {"action": "openPageTreePath", "path": ["styleguide TCA demo", "elements rte"]},
+                  {"action": "scrollPageTreeTo", "toSelector": "#identifier-0_12"},
+                  {"action": "switchToContentFrame"},
+                  {"action": "waitForText", "text": "elements rte", "timeout": 5},
+                  {"action": "scrollModuleBodyToBottom"},
+                  {"action": "makeScreenshotOfWindow", "fileName": "StylesheetContentScrolledDown"},
+               ]
+            ]
+         }
+      }
+   }
 
 To guide the reader of the documentation over the screenshot, DOM elements can be highlighted by actions ``drawBox``,
 ``drawArrow``, ``drawBadge``, etc. and the highlighting can be removed later by action ``clearDrawings``, e.g.
 
 .. code-block:: json
 
-{
-"suites": {
-"Introduction": {
-"screenshots": [
-[
-{"action": "drawBox", "selector": "#dashboard"},
-{"action": "drawArrow", "selector": "#dashboard", "position": "right-bottom"},
-{"action": "drawBadge", "selector": "#dashboard", "label": "Click here", "position": "bottom"},
-{"action": "makeScreenshotOfWindow", "fileName": "IntroductionDashboardWithHighlightedMenuitem"},
-{"action": "clearDrawings"},
-{"action": "makeScreenshotOfWindow", "fileName": "IntroductionDashboardWithoutHighlightedMenuitem"}
-]
-]
-}
-}
-}
+   {
+      "suites": {
+         "Introduction": {
+            "screenshots": [
+               [
+                  {"action": "drawBox", "selector": "#dashboard"},
+                  {"action": "drawArrow", "selector": "#dashboard", "position": "right-bottom"},
+                  {"action": "drawBadge", "selector": "#dashboard", "label": "Click here", "position": "bottom"},
+                  {"action": "makeScreenshotOfWindow", "fileName": "IntroductionDashboardWithHighlightedMenuitem"},
+                  {"action": "clearDrawings"},
+                  {"action": "makeScreenshotOfWindow", "fileName": "IntroductionDashboardWithoutHighlightedMenuitem"}
+               ]
+            ]
+         }
+      }
+   }
 
 Along with the screenshot a reStructuredText file gets created automatically in the folder ``Images/Rst``
 and can be used to include the screenshot comfortably into a documentation. The path can be changed by the actions
@@ -424,21 +424,21 @@ and can be used to include the screenshot comfortably into a documentation. The 
 
 .. code-block:: json
 
-{
-"suites": {
-"Introduction": {
-"screenshots": [
-[
-{"action": "setScreenshotsDocumentationPath", "path": "IntroductionDocumentation"},
-{"action": "setScreenshotsRstPath", "path": "Images/IntroductionRst"},
-{"action": "makeScreenshotOfWindow", "fileName": "IntroductionDashboardWithRstFile"},
-{"action": "createScreenshotsRstFile", "create": false},
-{"action": "makeScreenshotOfWindow", "fileName": "IntroductionDashboardWithoutRstFile"}
-]
-]
-}
-}
-}
+   {
+      "suites": {
+         "Introduction": {
+            "screenshots": [
+               [
+                  {"action": "setScreenshotsDocumentationPath", "path": "IntroductionDocumentation"},
+                  {"action": "setScreenshotsRstPath", "path": "Images/IntroductionRst"},
+                  {"action": "makeScreenshotOfWindow", "fileName": "IntroductionDashboardWithRstFile"},
+                  {"action": "createScreenshotsRstFile", "create": false},
+                  {"action": "makeScreenshotOfWindow", "fileName": "IntroductionDashboardWithoutRstFile"}
+               ]
+            ]
+         }
+      }
+   }
 
 which would result in a target folder ``IntroductionDocumentation/Images/IntroductionRst`` for reStructuredText files.
 
@@ -452,34 +452,34 @@ files, e.g.
 
 .. code-block:: json
 
-{
-"suites": {
-"Styleguide": {
-"screenshots": [
-[
-{"action": "setScreenshotsDocumentationPath", "path": "StyleguideDocumentation"},
-{"action": "setCodeSnippetsTargetPath", "path": "CodeSnippets/StyleguideCode"},
-{"action": "createCodeSnippet", "sourceFile": "typo3/sysext/core/Configuration/TCA/be_groups.php", "targetFileName": "CoreBeGroups"},
-{
-"action": "createCodeSnippet",
-"sourceFile": "typo3/sysext/core/Configuration/TCA/be_groups.php",
-"targetFileName": "CoreBeGroupsWithHighlights",
-"caption": "I am the caption",
-"name": "i-am-the-target-name",
-"showLineNumbers": true,
-"lineStartNumber": 1,
-"emphasizeLines": [5,6,7]
-}
-{"action": "createJsonCodeSnippet", "sourceFile": "typo3/sysext/core/composer.json", "fields": ["name", "support/source"], "targetFileName": "CoreComposerJsonDescription"},
-{"action": "createPhpArrayCodeSnippet", "sourceFile": "typo3/sysext/core/Configuration/TCA/be_groups.php", "fields": ["types"], "targetFileName": "CoreBeGroupsTypes"},
-{"action": "createPhpClassCodeSnippet", "class": "TYPO3\\CMS\\Core\\Cache\\Backend\\FileBackend", "members": ["frozen", "freeze"], "withComment": true, "targetFileName": "FileBackendFreezeWithComments"},
-{"action": "createXmlCodeSnippet", "sourceFile": "typo3/sysext/form/Configuration/FlexForms/FormFramework.xml", "nodes": ["T3DataStructure/sheets/sDEF"], "targetFileName": "FormFrameworkXmlSheetSDef"},
-{"action": "createYamlCodeSnippet", "sourceFile": "typo3/sysext/core/Configuration/Services.yaml", "fields": ["services/_defaults"], "targetFileName": "CoreServicesYamlDefaults"}
-]
-]
-}
-}
-}
+   {
+      "suites": {
+         "Styleguide": {
+            "screenshots": [
+               [
+                  {"action": "setScreenshotsDocumentationPath", "path": "StyleguideDocumentation"},
+                  {"action": "setCodeSnippetsTargetPath", "path": "CodeSnippets/StyleguideCode"},
+                  {"action": "createCodeSnippet", "sourceFile": "typo3/sysext/core/Configuration/TCA/be_groups.php", "targetFileName": "CoreBeGroups"},
+                  {
+                     "action": "createCodeSnippet",
+                     "sourceFile": "typo3/sysext/core/Configuration/TCA/be_groups.php",
+                     "targetFileName": "CoreBeGroupsWithHighlights",
+                     "caption": "I am the caption",
+                     "name": "i-am-the-target-name",
+                     "showLineNumbers": true,
+                     "lineStartNumber": 1,
+                     "emphasizeLines": [5,6,7]
+                  }
+                  {"action": "createJsonCodeSnippet", "sourceFile": "typo3/sysext/core/composer.json", "fields": ["name", "support/source"], "targetFileName": "CoreComposerJsonDescription"},
+                  {"action": "createPhpArrayCodeSnippet", "sourceFile": "typo3/sysext/core/Configuration/TCA/be_groups.php", "fields": ["types"], "targetFileName": "CoreBeGroupsTypes"},
+                  {"action": "createPhpClassCodeSnippet", "class": "TYPO3\\CMS\\Core\\Cache\\Backend\\FileBackend", "members": ["frozen", "freeze"], "withComment": true, "targetFileName": "FileBackendFreezeWithComments"},
+                  {"action": "createXmlCodeSnippet", "sourceFile": "typo3/sysext/form/Configuration/FlexForms/FormFramework.xml", "nodes": ["T3DataStructure/sheets/sDEF"], "targetFileName": "FormFrameworkXmlSheetSDef"},
+                  {"action": "createYamlCodeSnippet", "sourceFile": "typo3/sysext/core/Configuration/Services.yaml", "fields": ["services/_defaults"], "targetFileName": "CoreServicesYamlDefaults"}
+               ]
+            ]
+         }
+      }
+   }
 
 which would result in a target folder ``StyleguideDocumentation/CodeSnippets/StyleguideCode`` for code snippets.
 
@@ -487,22 +487,22 @@ Actions can be nested to use the return value of the inner action by the outer, 
 
 .. code-block:: json
 
-{
-"suites": {
-"Styleguide": {
-"screenshots": [
-[
-{
-"action": "makeScreenshotOfRecord",
-"uid": {"action": "getUidByField", "table": "pages", "field": "title", "value": "elements group"},
-"table": "pages",
-"fileName": "StyleguidePageRecordWithSpecificTitle"
-}
-]
-]
-}
-}
-}
+   {
+      "suites": {
+         "Styleguide": {
+            "screenshots": [
+               [
+                  {
+                     "action": "makeScreenshotOfRecord",
+                     "uid": {"action": "getUidByField", "table": "pages", "field": "title", "value": "elements group"},
+                     "table": "pages",
+                     "fileName": "StyleguidePageRecordWithSpecificTitle"
+                  }
+               ]
+            ]
+         }
+      }
+   }
 
 which executes the action ``getUidByField`` and uses the return value for parameter ``uid`` of action
 ``makeScreenshotOfRecord``.
@@ -511,63 +511,63 @@ Comments can be inserted to facilitate maintenance work, e.g.
 
 .. code-block:: json
 
-{
-"suites": {
-"Styleguide": {
-"screenshots": [
-[
-{"comment": "************************************"},
-{"comment": "Take screenshot of TYPO3 TCA record."},
-{"comment": "************************************"},
-{"action": "makeScreenshotOfRecord", "table": "pages", "uid": 3, "fileName": "StyleguidePageRecordWithUid3"},
-]
-]
-}
-}
-}
+   {
+      "suites": {
+         "Styleguide": {
+            "screenshots": [
+               [
+                  {"comment": "************************************"},
+                  {"comment": "Take screenshot of TYPO3 TCA record."},
+                  {"comment": "************************************"},
+                  {"action": "makeScreenshotOfRecord", "table": "pages", "uid": 3, "fileName": "StyleguidePageRecordWithUid3"},
+               ]
+            ]
+         }
+      }
+   }
 
 Files can be created and deleted in the public path of TYPO3 by actions ``writeFileToTypo3PublicPath`` and
 ``deleteFileInTypo3PublicPath``, e.g. to bypass access restrictions of the TYPO3 installation process:
 
 .. code-block:: json
 
-{
-"suites": {
-"Install": {
-"screenshots": [
-[
-{"action": "deleteFileInTypo3PublicPath", "filePath": "FIRST_INSTALL"},
-{"action": "reloadInstallationProcess"},
-{"action": "makeScreenshotOfElement", "selector": ".typo3-install-content", "fileName": "InstallationStep0"},
-{"action": "writeFileToTypo3PublicPath", "filePath": "FIRST_INSTALL"},
-{"action": "reloadInstallationProcess"},
-{"action": "makeScreenshotOfElement", "selector": ".typo3-install-content", "fileName": "InstallationStep1"}
-]
-]
-}
-}
-}
+   {
+      "suites": {
+         "Install": {
+            "screenshots": [
+               [
+                  {"action": "deleteFileInTypo3PublicPath", "filePath": "FIRST_INSTALL"},
+                  {"action": "reloadInstallationProcess"},
+                  {"action": "makeScreenshotOfElement", "selector": ".typo3-install-content", "fileName": "InstallationStep0"},
+                  {"action": "writeFileToTypo3PublicPath", "filePath": "FIRST_INSTALL"},
+                  {"action": "reloadInstallationProcess"},
+                  {"action": "makeScreenshotOfElement", "selector": ".typo3-install-content", "fileName": "InstallationStep1"}
+               ]
+            ]
+         }
+      }
+   }
 
 An action block can be included in another action block of the same suite by assigning a custom identifier to the former
 and using that identifier in the latter with the ``include`` directive, e.g.
 
 .. code-block:: json
 
-{
-"suites": {
-"Styleguide": {
-"screenshots": {
-"_default": [
-{"action": "resizeWindow", "width": 1024, "height": 768}
-],
-"list": [
-{"include": "_default"},
-{"action": "see", "text": "List"},
-]
-}
-}
-}
-}
+   {
+      "suites": {
+         "Styleguide": {
+            "screenshots": {
+               "_default": [
+                  {"action": "resizeWindow", "width": 1024, "height": 768}
+               ],
+               "list": [
+                  {"include": "_default"},
+                  {"action": "see", "text": "List"},
+               ]
+            }
+         }
+      }
+   }
 
 where the actions with ID "_default" are included and executed at the beginning of the action block with ID "list".
 
@@ -588,7 +588,7 @@ compiled into the ``PhotographerActions.php`` by
 
 .. code-block:: bash
 
-ddev exec vendor/bin/codecept build -c public/typo3conf/ext/screenshots/Classes/Runner/codeception.yml
+   ddev exec vendor/bin/codecept build -c public/typo3conf/ext/screenshots/Classes/Runner/codeception.yml
 
 Custom content elements
 -----------------------
@@ -632,7 +632,7 @@ Make all screenshots
 
 .. code-block:: bash
 
-ddev make-screenshots
+   ddev make-screenshots
 
 Make screenshots of specific folder only
 ----------------------------------------
@@ -643,49 +643,49 @@ The folder path can be defined as an absolute path or relative to ``public/t3doc
 
 .. code-block:: bash
 
-ddev make-screenshots -t TYPO3CMS-Reference-TCA
+   ddev make-screenshots -t TYPO3CMS-Reference-TCA
 
 Make screenshots of TYPO3 installation process
 ----------------------------------------------
 
 .. code-block:: bash
 
-ddev make-screenshots -s Install
+   ddev make-screenshots -s Install
 
 Make screenshots of TYPO3 backend
 ---------------------------------
 
 .. code-block:: bash
 
-ddev make-screenshots -s Core
+   ddev make-screenshots -s Core
 
 Make screenshots of TYPO3 backend + EXT:examples
 ------------------------------------------------
 
 .. code-block:: bash
 
-ddev make-screenshots -s Examples
+   ddev make-screenshots -s Examples
 
 Make screenshots of TYPO3 backend + EXT:extension_builder
 ---------------------------------------------------------
 
 .. code-block:: bash
 
-ddev make-screenshots -s ExtensionBuilder
+   ddev make-screenshots -s ExtensionBuilder
 
 Make screenshots of TYPO3 backend + EXT:introduction
 ----------------------------------------------------
 
 .. code-block:: bash
 
-ddev make-screenshots -s Introduction
+   ddev make-screenshots -s Introduction
 
 Make screenshots of TYPO3 backend + EXT:site_package
 ----------------------------------------------------
 
 .. code-block:: bash
 
-ddev make-screenshots -s SitePackage
+   ddev make-screenshots -s SitePackage
 
 Make screenshots of TYPO3 backend + EXT:styleguide
 --------------------------------------------------
@@ -703,24 +703,24 @@ inclusion in other action blocks.
 
 .. code-block:: json
 
-{
-"suites": {
-"Styleguide": {
-"screenshots": {
-"first-page": [
-{"action": "makeScreenshotOfRecord", "table": "pages", "uid": 1, "fileName": "StyleguideFirstPageRecord"}
-],
-"first-page-with-specific-field": [
-{"action": "makeScreenshotOfField", "table": "pages", "uid": 1, "fields": "abstract", "fileName": "StyleguideFirstPageRecordWithAbstractFieldOnly"},
-]
-}
-}
-}
-}
+   {
+      "suites": {
+         "Styleguide": {
+            "screenshots": {
+               "first-page": [
+                  {"action": "makeScreenshotOfRecord", "table": "pages", "uid": 1, "fileName": "StyleguideFirstPageRecord"}
+               ],
+               "first-page-with-specific-field": [
+                  {"action": "makeScreenshotOfField", "table": "pages", "uid": 1, "fields": "abstract", "fileName": "StyleguideFirstPageRecordWithAbstractFieldOnly"},
+               ]
+            }
+         }
+      }
+   }
 
 .. code-block:: bash
 
-ddev make-screenshots -s Styleguide -a first-page
+   ddev make-screenshots -s Styleguide -a first-page
 
 
 Screenshots manager
@@ -788,13 +788,13 @@ Run unit tests by
 
 .. code-block:: bash
 
-ddev run-unit-tests
+   ddev run-unit-tests
 
 Run unit tests with code coverage by
 
 .. code-block:: bash
 
-ddev xdebug on
-ddev run-unit-tests -c
-ddev xdebug off
+   ddev xdebug on
+   ddev run-unit-tests -c
+   ddev xdebug off
 
