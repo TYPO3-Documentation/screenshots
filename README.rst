@@ -12,15 +12,17 @@ This version is intended to run on TYPO3 v12.
 Requirements
 ------------
 
- - The command `jq` has to be available in the Operating System and can be installed with `sudo apt-get install jq` on linux if it's missing.
-   For Windows `jq` is available too i.e. on https://stedolan.github.io/jq/download/.
- - The following php-modules have to be installed:
-   - curl
-   - dom
-   - imagick
-   - json
-   - libxml
- - @TODO: selenium, ...
+ *  The command `jq` has to be available in the Operating System and can be installed with `sudo apt-get install jq` on linux if it's missing.
+    For Windows `jq` is available too i.e. on https://stedolan.github.io/jq/download/.
+ *  The following php-modules have to be installed:
+
+    *  curl
+    *  dom
+    *  imagick
+    *  json
+    *  libxml
+
+ * @TODO: selenium, ...
 
 Further Information
 -------------------
