@@ -12,10 +12,10 @@ namespace TYPO3\Documentation\Screenshots\Runner\Codeception\Support\Extension;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Codeception\Event\SuiteEvent;
+use Codeception\Event\TestEvent;
 use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\Documentation\Screenshots\Core\Acceptance\Extension\BackendEnvironment;
+use TYPO3\Documentation\Screenshots\Core\Acceptance\Extension\BackendTestEnvironment;
 use TYPO3\Documentation\Screenshots\Core\Testbase;
 
 /**
@@ -31,7 +31,7 @@ use TYPO3\Documentation\Screenshots\Core\Testbase;
  *
  * @see \TYPO3\Documentation\Screenshots\Core\Acceptance\Extension\BackendEnvironment
  */
-class InstallEnvironment extends BackendEnvironment
+class InstallEnvironment extends BackendTestEnvironment
 {
     protected array $localConfig = [
         // Order matters: Align sorting of core extensions with /public/typo3conf/PackageStates.php
@@ -76,9 +76,9 @@ class InstallEnvironment extends BackendEnvironment
     /**
      * Initialize TYPO3 instance
      *
-     * @param SuiteEvent $event
+     * @param TestEvent $event
      */
-    public function bootstrapTypo3Environment(SuiteEvent $event): void
+    public function bootstrapTypo3Environment(TestEvent $event): void
     {
         parent::bootstrapTypo3Environment($event);
 
