@@ -10,7 +10,8 @@ $EM_CONF[$_EXTKEY] = [
     ],
     'autoload' => [
         'psr-4' => [
-            'TYPO3\\Documentation\\Screenshots\\' => 'Classes/',
+            "TYPO3\\Documentation\\Screenshots\\" => "Classes/",
+            "TYPO3\\Documentation\\Screenshots\\Tests\\" => "Tests/"
         ],
     ],
 ];

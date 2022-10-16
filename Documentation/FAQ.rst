@@ -37,3 +37,32 @@ So as example the path for a disturbing file could look like this:
 
 Further details about Docker storage you can find here: https://docs.docker.com/storage/
 
+
+Class does not exist
+--------------------
+
+When the test "vendor/bin/run-unit-tests" is executed it might happen that errors like this are shown:
+
+   1) TYPO3\Documentation\Screenshots\Tests\Unit\Util\ClassHelperTest::extractMembersFromClassPrintsCodeAsIsInFile
+   ReflectionException: Class "TYPO3\Documentation\Screenshots\Tests\Unit\Fixtures\ClassWithComments" does not exist
+
+In this case most liekely the autoloading by composer is not working like intended.
+You can control the files "vendor/composer/autoload_psr4.php" and "vendor/composer/autoload_static.php":
+
+ * vendor/composer/autoload_psr4.php should contain these lines:
+
+     'TYPO3\\Documentation\\Screenshots\\Tests\\' => array($vendorDir . '/t3docs/screenshots/Tests'),
+     'TYPO3\\Documentation\\Screenshots\\' => array($vendorDir . '/t3docs/screenshots/Classes'),
+
+ * vendor/composer/autoload_static.php should contain these lines:
+
+        'TYPO3\\Documentation\\Screenshots\\Tests\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/t3docs/screenshots/Tests',
+        ),
+        'TYPO3\\Documentation\\Screenshots\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/t3docs/screenshots/Classes',
+        ),
+
+If those lines are missing the tests can't all be executed, even Classes with less deep namespace seem to be found.
